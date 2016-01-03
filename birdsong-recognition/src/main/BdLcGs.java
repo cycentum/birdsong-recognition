@@ -18,6 +18,7 @@
 package main;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -80,21 +81,21 @@ public class BdLcGs
 		 * Change them according to your environment.
 		 *********************************************************/
 		//Cuda.
-		Path fileCudnnLibrary=Paths.get("I:\\koumura\\EclipseWorkspaceSe\\Dependencies\\cudnn\\cuda\\bin\\cudnn64_70.dll");
-		Path fileCudaKernel=Paths.get("L:\\koumura\\Documents\\Visual Studio 2013\\Projects\\CudaKernel\\CudaKernel\\x64\\Release").resolve("kernel.cu.ptx");
+		Path fileCudnnLibrary=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\cudnn64_70.dll");
+		Path fileCudaKernel=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\kernel.cu.ptx");
 		
 		//Data.
-		Path dirWave=Paths.get("I:\\koumura\\MultiDays2\\LabelCrossValidation\\Wave\\B-W-20150112");
-		Path fileAllSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird0\\AllSequences.xml");
-		Path fileTrainingSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird0\\TrainingSequences.xml");
-		Path fileValidationSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird0\\ValidationSequences.xml");
+		Path dirWave=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\Wave\\B-W-20150112");
+		Path fileAllSequences=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\AllSequences.xml");
+		Path fileTrainingSequences=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\TrainingSequences.xml");
+		Path fileValidationSequences=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\ValidationSequences.xml");
 		
 		//Outputs.
-		Path fileThresholdingParameter=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\ThresholdBdLcGs");
-		Path fileDnnParameter=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\WeightBdLcGs");
-		Path fileDnnOutput=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\OutputBdLcGs");
-		Path fileOutputSequence=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\OutputSequenceBdLcGs.xml");
-		Path fileError=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\ErrorBdLcGs.xml");
+		Path fileThresholdingParameter=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\ThresholdBdLcGs");
+		Path fileDnnParameter=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\WeightBdLcGs");
+		Path fileDnnOutput=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\OutputBdLcGs");
+		Path fileOutputSequence=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\OutputSequenceBdLcGs.xml");
+		Path fileError=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\ErrorBdLcGs.xml");
 		
 		
 		/**********************************************************
@@ -148,14 +149,15 @@ public class BdLcGs
 		Thresholding.Config thresholdingConfig=new Thresholding.Config(executor, dirWave, verbose);
 
 		//Training.
-//		Thresholding.Parameter thresholdingParameter=Thresholding.train(trainingSequence, thresholdingHyperParameter, thresholdingConfig);
+		Thresholding.Parameter thresholdingParameter=Thresholding.train(trainingSequence, thresholdingHyperParameter, thresholdingConfig);
 
 		//Parameter saving.
-//		thresholdingParameter.writeXml(fileThresholdingParameter);
+		Files.createDirectories(fileThresholdingParameter.getParent());
+		thresholdingParameter.writeXml(fileThresholdingParameter);
 		
 		//Parameter loading.
 		//Uncomment to use pre-trained parameters.
-		Thresholding.Parameter thresholdingParameter=Thresholding.Parameter.parseXml(fileThresholdingParameter);
+//		Thresholding.Parameter thresholdingParameter=Thresholding.Parameter.parseXml(fileThresholdingParameter);
 
 		//Boundary detection in the validation data.
 		HashMap<Sequence, ArrayList<int[]>> soundInterval=Thresholding.boundaryDetection(validationSequence, thresholdingParameter, thresholdingHyperParameter, thresholdingConfig);
@@ -179,6 +181,7 @@ public class BdLcGs
 		DnnComputation.Param dnnParam=DnnComputation.trainLocalRecognition(trainingSequence, labelList, random, dnnHyperParam, dnnConfig);
 		
 		//Parameter saving.
+		Files.createDirectories(fileDnnParameter.getParent());
 		DnnUtils.saveParam(dnnParam.getLayerParam(), fileDnnParameter);
 		
 		//Parameter loading.
@@ -189,6 +192,7 @@ public class BdLcGs
 		HashMap<Sequence, float[]> dnnOutput=DnnComputation.localRecognition(validationSequence, labelList, dnnParam, dnnHyperParam, dnnConfig);
 		
 		//Saving DNN output.
+		Files.createDirectories(fileDnnOutput.getParent());
 		DnnUtils.saveOutput(dnnOutput, fileDnnOutput);
 		
 		
@@ -207,6 +211,7 @@ public class BdLcGs
 		HashMap<Sequence, ArrayList<Note>> outputSequence=HmmComputation.globalSequencing(observationProb, transitionProb, labelList, soundInterval, hmmHyperParam, hmmConfig);
 		
 		//Saving output sequences.
+		Files.createDirectories(fileOutputSequence.getParent());
 		Sequence.writeOutputSequence(outputSequence, fileOutputSequence);
 		
 		
@@ -219,6 +224,7 @@ public class BdLcGs
 		System.out.println();
 		System.out.printf("Matching error =\t%.2f%%", (matchingError*100));
 		System.out.println();
+		Files.createDirectories(fileError.getParent());
 		ErrorSaving.writeXml(levenshteinError, matchingError, fileError);
 	}
 }

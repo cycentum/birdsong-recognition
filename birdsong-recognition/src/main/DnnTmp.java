@@ -78,7 +78,7 @@ public class DnnTmp
 		return sequence.stream().map(s->spec.get(s)).collect(CollectionUtils.arrayListCollector());
 	}
 
-	public static void main(String... arg) throws IOException
+	/*public static void main(String... arg) throws IOException
 	{
 		int numThread=4;
 		Executor executor=new Executor(numThread);
@@ -101,6 +101,17 @@ public class DnnTmp
 		{
 			Path file1=file0.getParent().getParent().resolve(file0.getFileName().toString());
 			System.out.println(Arrays.equals(Files.readAllBytes(file0), Files.readAllBytes(file1))+" "+file0.getFileName());
+		}
+	}*/
+	
+	
+	static int birdIndex=0;
+	
+	public static void main(String... arg)
+	{
+		for(birdIndex=0; birdIndex<11; ++birdIndex)
+		{
+			
 		}
 	}
 	
