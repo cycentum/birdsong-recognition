@@ -44,6 +44,7 @@ import computation.Thresholding;
 import cudnn.CudaException;
 import cudnn.CudnnException;
 import cudnn.layer.ConvLayer;
+import errorcomputation.ErrorSaving;
 import errorcomputation.Levenshtein;
 import errorcomputation.Matching;
 import no.uib.cipr.matrix.NotConvergedException;
@@ -93,6 +94,7 @@ public class BdLcGs
 		Path fileDnnParameter=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\WeightBdLcGs");
 		Path fileDnnOutput=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\OutputBdLcGs");
 		Path fileOutputSequence=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\OutputSequenceBdLcGs.xml");
+		Path fileError=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\ErrorBdLcGs.xml");
 		
 		
 		/**********************************************************
@@ -217,5 +219,6 @@ public class BdLcGs
 		System.out.println();
 		System.out.printf("Matching error =\t%.2f%%", (matchingError*100));
 		System.out.println();
+		ErrorSaving.writeXml(levenshteinError, matchingError, fileError);
 	}
 }
