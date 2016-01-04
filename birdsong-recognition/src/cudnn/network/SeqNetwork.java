@@ -205,7 +205,6 @@ public class SeqNetwork implements Model
 	
 	public void destroy(Cudnn cudnn) throws CudaException, CudnnException
 	{
-//		Cuda.setDevice(m_gpuid);
 		for(Layer la: layer) la.destroy(cudnn);
 		if(workspaceDev.getJnaPointer()!=null) Cuda.free(workspaceDev);
 		

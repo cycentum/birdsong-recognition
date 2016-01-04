@@ -33,13 +33,14 @@ import jcuda.driver.JCudaDriver;
 public class CudaDriver
 {
 	private CUmodule module;
+	private CUcontext context;
 
 	public CudaDriver() throws CudaException
 	{
 		JCudaDriver.cuInit(0);
 		CUdevice device = new CUdevice();
 		checkError(JCudaDriver.cuDeviceGet(device, 0));
-		CUcontext context = new CUcontext();
+		context = new CUcontext();
 		checkError(JCudaDriver.cuCtxCreate(context, 0, device));
 		module = new CUmodule();
 	}
@@ -47,6 +48,11 @@ public class CudaDriver
 	{
 		this();
 		load(path.toAbsolutePath().toString());
+	}
+	
+	public void destroy() throws CudaException
+	{
+		checkError(JCudaDriver.cuCtxDestroy(context));
 	}
 
 	private static void checkError(int status) throws CudaException

@@ -18,15 +18,12 @@
 package main;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.IntBinaryOperator;
 import java.util.stream.Collectors;
 
@@ -42,9 +39,9 @@ import computation.DnnComputation.HyperParam;
 import computation.HmmComputation;
 import computation.STFTParam;
 import computation.Sequence;
-import computation.Thresholding;
 import computation.Sequence.LabelList;
 import computation.Sequence.Note;
+import cudnn.Cuda;
 import cudnn.CudaException;
 import cudnn.CudnnException;
 import cudnn.layer.ConvLayer;
@@ -52,7 +49,6 @@ import errorcomputation.ErrorSaving;
 import errorcomputation.Levenshtein;
 import errorcomputation.Matching;
 import no.uib.cipr.matrix.NotConvergedException;
-import utils.CollectionUtils;
 import utils.DnnUtils;
 import utils.Executor;
 import utils.SoundUtils;
@@ -67,6 +63,7 @@ public class LcBdGs
 		try
 		{
 			main(executor);
+			Cuda.deviceReset();
 		}
 		catch(Exception e)
 		{
@@ -85,20 +82,20 @@ public class LcBdGs
 		 * Change them according to your environment.
 		 *********************************************************/
 		//Cuda.
-		Path fileCudnnLibrary=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\cudnn64_70.dll");
-		Path fileCudaKernel=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\kernel.cu.ptx");
+		Path fileCudnnLibrary=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\cudnn64_70.dll");
+		Path fileCudaKernel=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\kernel.cu.ptx");
 		
 		//Data.
-		Path dirWave=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\Wave\\B-W-20150112");
-		Path fileAllSequences=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\AllSequences.xml");
-		Path fileTrainingSequences=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\TrainingSequences.xml");
-		Path fileValidationSequences=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\ValidationSequences.xml");
+		Path dirWave=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\Wave");
+		Path fileAllSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\AllSequences.xml");
+		Path fileTrainingSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\TrainingSequences.xml");
+		Path fileValidationSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\ValidationSequences.xml");
 		
 		//Outputs.
-		Path fileDnnParameter=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\WeightLcBdGs");
-		Path fileDnnOutput=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\OutputLcBdGs");
-		Path fileOutputSequence=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\OutputSequenceLcBdGs.xml");
-		Path fileError=Paths.get("C:\\Users\\koumura\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\ErrorLcBdGs.xml");
+		Path fileDnnParameter=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\WeightLcBdGs");
+		Path fileDnnOutput=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\OutputLcBdGs");
+		Path fileOutputSequence=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\OutputSequenceLcBdGs.xml");
+		Path fileError=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\ErrorLcBdGs.xml");
 				
 		
 		/**********************************************************

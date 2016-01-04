@@ -23,7 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.IntBinaryOperator;
@@ -34,18 +33,27 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import org.apache.commons.math3.random.MersenneTwister;
 
 import computation.DnnComputation;
+import computation.DnnComputation.Config;
+import computation.DnnComputation.HyperParam;
 import computation.HmmComputation;
 import computation.STFTParam;
 import computation.Sequence;
-import computation.Thresholding;
-import cudnn.CudaException;
-import cudnn.CudnnException;
-import cudnn.layer.ConvLayer;
-import computation.DnnComputation.Config;
-import computation.DnnComputation.HyperParam;
 import computation.Sequence.LabelList;
-import computation.Sequence.Note;
 import computation.Sequence.WavePosition;
+import computation.Thresholding;
+import cudnn.ActivationMode;
+import cudnn.Cuda;
+import cudnn.CudaDriver;
+import cudnn.CudaException;
+import cudnn.Cudnn;
+import cudnn.CudnnException;
+import cudnn.FloatType;
+import cudnn.IntType;
+import cudnn.layer.ConvLayer;
+import cudnn.layer.ConvLayer.BackwardAlgorithm;
+import cudnn.layer.DataLayer;
+import cudnn.layer.Layer;
+import cudnn.network.SeqNetwork;
 import no.uib.cipr.matrix.NotConvergedException;
 import utils.CollectionUtils;
 import utils.DnnUtils;
@@ -111,9 +119,12 @@ public class DnnTmp
 	{
 		for(birdIndex=0; birdIndex<11; ++birdIndex)
 		{
-			
+			BdLcGs.main();
+			LcBdGs.main();
+			LcGsBdGs.main();
 		}
 	}
+	
 	
 	public static ArrayList<ArrayList<double[]>> observationProbBdLcGs(boolean conv) throws UnsupportedAudioFileException, IOException, NotConvergedException, CudaException, CudnnException
 	{

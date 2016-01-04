@@ -102,6 +102,10 @@ public class DnnUtils
 	{
 		int numConvChannel=16;
 		int fullConnectionSize=240;
+		
+		/**/
+		numConvChannel=1;
+
 		DataLayer dataLayer=new DataLayer(1, dataLayerHeight, inputWidth);
 		ConvLayer conv1=new ConvLayer(numConvChannel, 5, 5, ActivationMode.RELU, dataLayer, backwardAlgo);
 		ConvLayer conv11=new ConvLayer(numConvChannel, 1, 1, ActivationMode.RELU, conv1, backwardAlgo);
@@ -121,7 +125,7 @@ public class DnnUtils
 			globalFull=new ConvLayer(fullConnectionSize, globalFullFilterHeight, 1, ActivationMode.RELU, full, backwardAlgo);
 		}
 		SeqSoftmaxConvLayer smLayer=new SeqSoftmaxConvLayer(softMaxSize, 1, 1, 1, 1, finalInputHeight>localInputHeight?globalFull:full, backwardAlgo);
-		
+
 		ArrayList<Layer> layer=new ArrayList<>();
 		layer.add(dataLayer);
 		layer.add(conv1);

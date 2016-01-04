@@ -38,6 +38,7 @@ import cudnn.layer.ConvLayer;
 import cudnn.layer.SeqSoftmaxConvLayer;
 import cudnn.learner.Adam;
 import cudnn.network.SeqNetwork;
+import jcuda.jcublas.JCublas;
 import no.uib.cipr.matrix.NotConvergedException;
 import utils.DnnUtils;
 
@@ -101,6 +102,8 @@ public class DnnComputation
 		network.destroy(cudnn);
 		learner.destroy();
 		cudnn.destroty();
+		JCublas.cublasShutdown();  //memory leak will happen if cublasShutdown is called after driver.destroy()
+		driver.destroy();
 		
 		return new Param(DnnUtils.copyParamFromLayer(network.getLayer()));
 	}
@@ -137,6 +140,8 @@ public class DnnComputation
 		}
 		network.destroy(cudnn);
 		cudnn.destroty();
+		JCublas.cublasShutdown();  //memory leak will happen if cublasShutdown is called after driver.destroy()
+		driver.destroy();
 		
 		HashMap<Sequence, float[]> sequenceOutput=new HashMap<>(validationSequence.size()*4/3);
 		for(int s=0; s<data.getSpecLabelPackBegin().size(); ++s)

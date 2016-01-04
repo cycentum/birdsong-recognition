@@ -41,7 +41,7 @@ public class Sequence
 	private String waveFileName;
 	private int position, length;
 	private ArrayList<Note> note;
-	
+
 	private Sequence(String waveFileName, int position, int length, ArrayList<Note> note)
 	{
 		this.waveFileName = waveFileName;
