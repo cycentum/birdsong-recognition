@@ -53,7 +53,7 @@ public class DnnComputation
 		Cudnn cudnn=new Cudnn(config.fileCudnnLibrary);
 		CudaDriver driver=new CudaDriver();
 		driver.load(config.fileCudaKernel.toAbsolutePath().toString());
-		SeqNetwork network=DnnUtils.netinnetNetwork(data.getDataLayerHeight(), hyperParam.freqLength, config.softmaxSizeFunc.applyAsInt(labelList.size(), hyperParam.numSubLabel), data.getMaxBatchSize(), cudnn, driver, hyperParam.localInputHeight, hyperParam.finalInputHeight, config.backwardAlogorithm);
+		SeqNetwork network=DnnUtils.netinnetNetwork(data.getDataLayerHeight(), hyperParam.freqLength, config.softmaxSizeFunc.applyAsInt(labelList.size(), hyperParam.numSubLabel), data.getMaxBatchSize(), cudnn, driver, hyperParam.localInputHeight, hyperParam.finalInputHeight, config.backwardAlogorithm, hyperParam.numConvChannel, hyperParam.fullConnectionSize);
 
 		network.cudaMalloc();
 		if(config.verbose)
@@ -117,7 +117,7 @@ public class DnnComputation
 		Cudnn cudnn=new Cudnn(config.fileCudnnLibrary);
 		CudaDriver driver=new CudaDriver();
 		driver.load(config.fileCudaKernel.toAbsolutePath().toString());
-		SeqNetwork network=DnnUtils.netinnetNetwork(data.getDataLayerHeight(), hyperParam.freqLength, config.softmaxSizeFunc.applyAsInt(labelList.size(), hyperParam.numSubLabel), data.getMaxBatchSize(), cudnn, driver, hyperParam.localInputHeight, hyperParam.finalInputHeight, config.backwardAlogorithm);
+		SeqNetwork network=DnnUtils.netinnetNetwork(data.getDataLayerHeight(), hyperParam.freqLength, config.softmaxSizeFunc.applyAsInt(labelList.size(), hyperParam.numSubLabel), data.getMaxBatchSize(), cudnn, driver, hyperParam.localInputHeight, hyperParam.finalInputHeight, config.backwardAlogorithm, hyperParam.numConvChannel, hyperParam.fullConnectionSize);
 		SeqSoftmaxConvLayer outputLayer=(SeqSoftmaxConvLayer)network.getLayer().get(network.getLayer().size()-1);
 
 		network.cudaMalloc();
@@ -196,10 +196,10 @@ public class DnnComputation
 	public static class HyperParam
 	{
 		private STFTParam stftParam;
-		private int dpssParam, localInputHeight, finalInputHeight, numSubLabel, freqOffset, freqLength, inputHeightUpper, batchSizeUpper, numIter;
+		private int dpssParam, localInputHeight, finalInputHeight, numSubLabel, freqOffset, freqLength, inputHeightUpper, batchSizeUpper, numIter, numConvChannel, fullConnectionSize;
 		
 		public HyperParam(STFTParam stftParam, int dpssParam, int localInputHeight, int finalInputHeight, int numSubLabel,
-				int freqOffset, int freqLength, int inputHeightUpper, int batchSizeUpper, int numIter) {
+				int freqOffset, int freqLength, int inputHeightUpper, int batchSizeUpper, int numIter, int numConvChannel, int fullConnectionSize) {
 			this.stftParam = stftParam;
 			this.dpssParam = dpssParam;
 			this.localInputHeight = localInputHeight;
@@ -210,6 +210,8 @@ public class DnnComputation
 			this.inputHeightUpper = inputHeightUpper;
 			this.batchSizeUpper = batchSizeUpper;
 			this.numIter = numIter;
+			this.numConvChannel=numConvChannel;
+			this.fullConnectionSize=fullConnectionSize;
 		}
 	}
 	

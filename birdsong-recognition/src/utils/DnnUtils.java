@@ -98,14 +98,8 @@ public class DnnUtils
 		return filterSizeList;
 	}
 	
-	public static SeqNetwork netinnetNetwork(int dataLayerHeight, int inputWidth, int softMaxSize, int batchSize, Cudnn cudnn, CudaDriver driver, int localInputHeight, int finalInputHeight, ConvLayer.BackwardAlgorithm backwardAlgo) throws CudnnException, CudaException
+	public static SeqNetwork netinnetNetwork(int dataLayerHeight, int inputWidth, int softMaxSize, int batchSize, Cudnn cudnn, CudaDriver driver, int localInputHeight, int finalInputHeight, ConvLayer.BackwardAlgorithm backwardAlgo, int numConvChannel, int fullConnectionSize) throws CudnnException, CudaException
 	{
-		int numConvChannel=16;
-		int fullConnectionSize=240;
-		
-		/**/
-		numConvChannel=1;
-
 		DataLayer dataLayer=new DataLayer(1, dataLayerHeight, inputWidth);
 		ConvLayer conv1=new ConvLayer(numConvChannel, 5, 5, ActivationMode.RELU, dataLayer, backwardAlgo);
 		ConvLayer conv11=new ConvLayer(numConvChannel, 1, 1, ActivationMode.RELU, conv1, backwardAlgo);

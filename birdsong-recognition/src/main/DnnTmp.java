@@ -169,7 +169,9 @@ public class DnnTmp
 		IntBinaryOperator silentLabelFunc=(numUpperLabel, numLowreLabel)->-1;
 		IntBinaryOperator softmaxSizeFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel;
 		int numIter=80;
-		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, LOCAL_INPUT_HEIGHT, FINAL_INPUT_HEIGHT, NUM_LOWER_LABEL, freqOffset, freqLength, heightUpper, 4, numIter);
+		int numConvChannel=16;
+		int fullConnectionSize=240;
+		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, LOCAL_INPUT_HEIGHT, FINAL_INPUT_HEIGHT, NUM_LOWER_LABEL, freqOffset, freqLength, heightUpper, 4, numIter, numConvChannel, fullConnectionSize);
 		Config dnnConfig=new Config(true, silentLabelFunc, softmaxSizeFunc, specStat, FILE_CUDA_KERNEL, FILE_CUDNN_LIBRARY, DIR_WAVE, ConvLayer.BackwardAlgorithm.FAST_NON_DETERMINISTIC);
 		
 		ArrayList<Sequence> validationSequence=Sequence.readXml(FILE_VALIDATION_DATA);
@@ -230,7 +232,9 @@ public class DnnTmp
 		IntBinaryOperator silentLabelFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel;
 		IntBinaryOperator softmaxSizeFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel+1;
 		int numIter=80;
-		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, LOCAL_INPUT_HEIGHT, FINAL_INPUT_HEIGHT, NUM_LOWER_LABEL, freqOffset, freqLength, heightUpper, 4, numIter);
+		int numConvChannel=16;
+		int fullConnectionSize=240;
+		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, LOCAL_INPUT_HEIGHT, FINAL_INPUT_HEIGHT, NUM_LOWER_LABEL, freqOffset, freqLength, heightUpper, 4, numIter, numConvChannel, fullConnectionSize);
 //		Config dnnConfig=new Config(true, silentLabelFunc, softmaxSizeFunc, specStat, FILE_CUDA_KERNEL, FILE_CUDNN_LIBRARY, DIR_WAVE);
 		
 		MersenneTwister random=new MersenneTwister(0);
@@ -293,7 +297,9 @@ public class DnnTmp
 		IntBinaryOperator silentLabelFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel;
 		IntBinaryOperator softmaxSizeFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel+1;
 		int numIter=80;
-		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, LOCAL_INPUT_HEIGHT, FINAL_INPUT_HEIGHT, NUM_LOWER_LABEL, freqOffset, freqLength, heightUpper, 4, numIter);
+		int numConvChannel=16;
+		int fullConnectionSize=240;
+		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, LOCAL_INPUT_HEIGHT, FINAL_INPUT_HEIGHT, NUM_LOWER_LABEL, freqOffset, freqLength, heightUpper, 4, numIter, numConvChannel, fullConnectionSize);
 		Config dnnConfig=new Config(true, silentLabelFunc, softmaxSizeFunc, specStat, FILE_CUDA_KERNEL, FILE_CUDNN_LIBRARY, DIR_WAVE, ConvLayer.BackwardAlgorithm.FAST_NON_DETERMINISTIC);
 		
 		MersenneTwister random=new MersenneTwister(0);

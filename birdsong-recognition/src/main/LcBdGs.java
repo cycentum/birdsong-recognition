@@ -49,6 +49,7 @@ import errorcomputation.ErrorSaving;
 import errorcomputation.Levenshtein;
 import errorcomputation.Matching;
 import no.uib.cipr.matrix.NotConvergedException;
+import utils.CollectionUtils;
 import utils.DnnUtils;
 import utils.Executor;
 import utils.SoundUtils;
@@ -113,6 +114,8 @@ public class LcBdGs
 		int numIter=200;
 		int batchSizeUpper=2;
 		int randomSeed=0;
+		int numConvChannel=16;
+		int fullConnectionSize=240;
 		
 		//HMM.
 		double smoothingConstant=1e-4;
@@ -136,7 +139,7 @@ public class LcBdGs
 		LabelList labelList=Sequence.LabelList.create(allSequence);
 		ArrayList<Sequence> trainingSequence=Sequence.readXml(fileTrainingSequences);
 		ArrayList<Sequence> validationSequence=Sequence.readXml(fileValidationSequences);
-
+		
 		
 		/**********************************************************
 		 * Local classification.
@@ -149,7 +152,7 @@ public class LcBdGs
 		IntBinaryOperator silentLabelFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel;
 		IntBinaryOperator softmaxSizeFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel+1;
 		MersenneTwister random=new MersenneTwister(randomSeed);
-		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, localInputHeight, localInputHeight, numSubLabel, freqOffset, freqLength, inputHeightUpper, batchSizeUpper, numIter);
+		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, localInputHeight, localInputHeight, numSubLabel, freqOffset, freqLength, inputHeightUpper, batchSizeUpper, numIter, numConvChannel, fullConnectionSize);
 		
 		//Computing mean & sd of training spectrogram for input normalization.
 		HashMap<Sequence, float[]> spectrogram=SoundUtils.spectrogram(Sequence.wavePositionMap(trainingSequence, dirWave), stftParam, dpssParam, freqOffset, freqLength);

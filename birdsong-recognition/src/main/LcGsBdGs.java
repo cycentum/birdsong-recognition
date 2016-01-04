@@ -114,7 +114,9 @@ public class LcGsBdGs
 		int numIter=200;
 		int batchSizeUpper=2;
 		int randomSeed=0;
-		
+		int numConvChannel=16;
+		int fullConnectionSize=240;
+
 		//HMM.
 		double smoothingConstant=1e-4;
 		boolean posteriorToObservationProb=false;
@@ -150,7 +152,7 @@ public class LcGsBdGs
 		IntBinaryOperator silentLabelFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel;
 		IntBinaryOperator softmaxSizeFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel+1;
 		MersenneTwister random=new MersenneTwister(randomSeed);
-		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, localInputHeight, finalInputHeight, numSubLabel, freqOffset, freqLength, inputHeightUpper, batchSizeUpper, numIter);
+		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, localInputHeight, finalInputHeight, numSubLabel, freqOffset, freqLength, inputHeightUpper, batchSizeUpper, numIter, numConvChannel, fullConnectionSize);
 		
 		//Computing mean & sd of training spectrogram for input normalization.
 		HashMap<Sequence, float[]> spectrogram=SoundUtils.spectrogram(Sequence.wavePositionMap(trainingSequence, dirWave), stftParam, dpssParam, freqOffset, freqLength);
