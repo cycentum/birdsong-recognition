@@ -180,7 +180,7 @@ public class Thresholding
 		LinkedList<Parameter> bestParam=new LinkedList<>();
 		for(int index=0; index<specIndexAmp.size(); ++index)
 		{
-			if(config.verbose && index%1000==0) System.out.println("Thresholding training "+(int)((double)index/specIndexAmp.size()*100)+"%");
+			if(config.verbose && index%(specIndexAmp.size()/50)==0) System.out.println("Thresholding training "+(int)((double)index/specIndexAmp.size()*100)+"%");
 			
 			Sequence changedSpec=specIndexAmp.get(index).get0();
 			double threshold=specIndexAmp.get(index).get1();
