@@ -75,7 +75,7 @@ public class DnnComputation
 				network.copyLabelToDevice(data.getBatchLabel().get(batch));
 				network.setLabelShift(shift, 0);
 				network.copyDataToDeviceHeightDisp();
-				Cuda.deviceSynchronize();
+//				Cuda.deviceSynchronize();
 				learner.iteration();
 			}
 			if(config.verbose)
@@ -89,7 +89,7 @@ public class DnnComputation
 					{
 						network.setLabelShift(shift, 0);
 						network.copyDataToDeviceHeightDisp();
-						Cuda.deviceSynchronize();
+//						Cuda.deviceSynchronize();
 						network.compForward(driver, cudnn);
 						error+=network.compError(driver);
 					}
@@ -132,7 +132,7 @@ public class DnnComputation
 			{
 				network.setLabelShift(shift, 0);
 				network.copyDataToDeviceHeightDisp();
-				Cuda.deviceSynchronize();
+//				Cuda.deviceSynchronize();
 				network.compForward(driver, cudnn);
 				float[] o=Cuda.memcpyDeviceToFloatArray(outputLayer.getValueDev(), outputLayer.sizeCHW()*data.getMaxBatchSize());
 				networkOutput.get(batch).add(o);
