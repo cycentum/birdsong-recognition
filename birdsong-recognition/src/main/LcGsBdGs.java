@@ -51,6 +51,7 @@ import errorcomputation.Matching;
 import no.uib.cipr.matrix.NotConvergedException;
 import utils.DnnUtils;
 import utils.Executor;
+import utils.Pair;
 import utils.SoundUtils;
 
 
@@ -88,8 +89,6 @@ public class LcGsBdGs
 		//Data.
 		Path dirWave=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\Wave");
 		Path fileAllSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\AllSequences.xml");
-		Path fileTrainingSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\TrainingSequences.xml");
-		Path fileValidationSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\ValidationSequences.xml");
 		
 		//Outputs.
 		Path fileDnnParameter=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\WeightLcGsBdGs");
@@ -102,6 +101,9 @@ public class LcGsBdGs
 		 * Hyper parameters.
 		 * These hyper parameters may be determined using cross-validation within training data.
 		 *********************************************************/
+		//Sequences.
+		double trainingSequenceLengthSec=120;
+		
 		//Spectrogram.
 		STFTParam stftParam=new STFTParam(512, 32);
 		double frequencyStartHz=1000, frequencyEndHz=8000;
@@ -135,23 +137,25 @@ public class LcGsBdGs
 		/**********************************************************
 		 * Reading sequences.
 		 *********************************************************/
+		MersenneTwister random=new MersenneTwister(randomSeed);
 		ArrayList<Sequence> allSequence=Sequence.readXml(fileAllSequences);
+		int samplingRate=(int)SoundUtils.checkSamplingRate(allSequence.stream().map(s->s.getWaveFileName()).collect(Collectors.toList()), dirWave);
 		LabelList labelList=Sequence.LabelList.create(allSequence);
-		ArrayList<Sequence> trainingSequence=Sequence.readXml(fileTrainingSequences);
-		ArrayList<Sequence> validationSequence=Sequence.readXml(fileValidationSequences);
+		int trainingSequenceLength=(int)(trainingSequenceLengthSec*samplingRate);
+		Pair<ArrayList<Sequence>, ArrayList<Sequence>> divided=Sequence.extract(trainingSequenceLength, random, allSequence); 
+		ArrayList<Sequence> trainingSequence=divided.get0();
+		ArrayList<Sequence> validationSequence=divided.get1();
 				
 		
 		/**********************************************************
 		 * Local classification & global sequencing.
 		 *********************************************************/
-		int samplingRate=(int)SoundUtils.checkSamplingRate(allSequence.stream().map(s->s.getWaveFileName()).collect(Collectors.toList()), dirWave);
 		int freqOffset=(int)(frequencyStartHz/stftParam.unitFrequency(samplingRate));
 		int freqLength=(int)(frequencyEndHz/stftParam.unitFrequency(samplingRate))-freqOffset;
 		int inputHeightUpper=stftParam.spectrogramLength((int)(inputDataLengthUpperSec*samplingRate));
 		int numSubLabel=3;
 		IntBinaryOperator silentLabelFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel;
 		IntBinaryOperator softmaxSizeFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel+1;
-		MersenneTwister random=new MersenneTwister(randomSeed);
 		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, localInputHeight, finalInputHeight, numSubLabel, freqOffset, freqLength, inputHeightUpper, batchSizeUpper, numIter, numConvChannel, fullConnectionSize);
 		
 		//Computing mean & sd of training spectrogram for input normalization.

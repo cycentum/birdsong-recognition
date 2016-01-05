@@ -32,6 +32,7 @@ import org.apache.commons.math3.random.MersenneTwister;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import utils.CollectionUtils;
 import utils.Pair;
 import utils.RandomUtils;
 import utils.XmlUtils;
@@ -267,47 +268,22 @@ public class Sequence
 		return wavePositionMap;
 	}
 	
-	public static ArrayList<ArrayList<Sequence>> divide(List<Sequence> sequence, int numGroup, LabelList labelList, MersenneTwister random)
+	public static Pair<ArrayList<Sequence>, ArrayList<Sequence>> extract(int sequenceLength0Upper, MersenneTwister random, List<Sequence> sequence)
 	{
-		ArrayList<Pair<Sequence, int[]>> sequenceLabelCount=sequence.stream()
-			.map(seq->{
-				int[] count=new int[labelList.size()];
-				for(Note n: seq.getNote()) ++count[labelList.indexOf(n.getLabel())];
-				return new Pair<>(seq, count);
-			}).collect(Collectors.toCollection(ArrayList::new));
-		
-		int numLabel=labelList.size();
-		ArrayList<Pair<Integer, Integer>> labelCountAll=new ArrayList<>();  //Pair(label, count)
-		for(int li=0; li<numLabel; ++li) labelCountAll.add(new Pair<>(li, 0));
-		for(Pair<Sequence, int[]> count: sequenceLabelCount)
+		ArrayList<Sequence> all=sequence.stream().collect(CollectionUtils.arrayListCollector());
+		all=RandomUtils.permutation(all, random);
+		int length=0;
+		int num0=0;
+		while(num0<all.size())
 		{
-			for(int li=0; li<numLabel; ++li) labelCountAll.get(li).set1(labelCountAll.get(li).get1()+count.get1()[li]);
+			int len=all.get(num0).getLength();
+			if(length+len>=sequenceLength0Upper) break;
+			++num0;
+			length+=len;
 		}
-		labelCountAll.sort((o1, o2)->o1.get1()-o2.get1());
-		HashMap<Sequence, Integer> sequenceGroup=new HashMap<>(sequence.size()*4/3);
-		HashSet<Sequence> finishedSequence=new HashSet<>(sequence.size()*4/3);
-		int currentLabelIndex=0;
-		ArrayList<Pair<Integer, int[]>> groupLabelCount=new ArrayList<>(numGroup);  //Pair(group, labelCount)
-		for(int g=0; g<numGroup; ++g) groupLabelCount.add(new Pair<>(g, new int[numLabel]));
-		while(sequenceGroup.size()<sequence.size())
-		{
-			int currentLabel=labelCountAll.get(currentLabelIndex).get0();
-			sequenceLabelCount=RandomUtils.permutation(sequenceLabelCount, random);
-			for(Pair<Sequence, int[]> lc: sequenceLabelCount) if(!finishedSequence.contains(lc.get0()))
-			{
-				if(lc.get1()[currentLabel]==0) continue;
-				Pair<Integer, int[]> minGroup=Collections.min(groupLabelCount, (o1, o2)->o1.get1()[currentLabel]-o2.get1()[currentLabel]);
-				sequenceGroup.put(lc.get0(), minGroup.get0());
-				finishedSequence.add(lc.get0());
-				for(int li=0; li<numLabel; ++li) minGroup.get1()[li]+=lc.get1()[li];
-			}
-			++currentLabelIndex;
-		}
-		
-		ArrayList<ArrayList<Sequence>> group=new ArrayList<ArrayList<Sequence>>(numGroup);
-		for(int g=0; g<numGroup; ++g) group.add(new ArrayList<>());
-		for(Sequence seq: sequence) group.get(sequenceGroup.get(seq)).add(seq);
-		return group;
+		ArrayList<Sequence> sequence0=all.subList(0, num0).stream().collect(CollectionUtils.arrayListCollector());
+		ArrayList<Sequence> sequence1=all.subList(num0, all.size()).stream().collect(CollectionUtils.arrayListCollector());
+		return new Pair<>(sequence0, sequence1);
 	}
 	
 	public static class LabelList

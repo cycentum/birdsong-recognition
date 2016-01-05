@@ -57,7 +57,7 @@ public class Viewer
 		Path fileSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird0\\AllSequences.xml");
 		
 		//Image outputs.
-		Path dirImageOutput=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Image");
+		Path fileImageOutput=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Image.png");
 		
 		
 		/**********************************************************
@@ -75,7 +75,10 @@ public class Viewer
 		int barHeight=5;
 		int fontSize=20;
 		int bottomMargin=30;
-		Color labelColor=Color.red;
+		Color labelColor=Color.blue;
+		
+		//index of the sequence to show
+		int sequenceIndex=0;
 		
 		
 		
@@ -95,26 +98,23 @@ public class Viewer
 		/**********************************************************
 		 * Showing images.
 		 *********************************************************/
-		for(Sequence seq: sequence)
+		Sequence seq=sequence.get(sequenceIndex);
 		{
 			BufferedImage image=SoundUtils.spectrogramImage(spectrogram.get(seq), blackValue, whiteValue, freqLength, bottomMargin);
 			drawLabel(image, seq.getNote(), labelColor, fontSize, barHeight, stftParam, freqLength);
 			JFrame frame=imageFrame(image);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setVisible(true);
-			break;
 		}
 		
 		/**********************************************************
 		 * Saving images.
 		 *********************************************************/
-		Files.createDirectories(dirImageOutput);
-		for(Sequence seq: sequence)
+		Files.createDirectories(fileImageOutput.getParent());
 		{
 			BufferedImage image=SoundUtils.spectrogramImage(spectrogram.get(seq), blackValue, whiteValue, freqLength, bottomMargin);
 			drawLabel(image, seq.getNote(), labelColor, fontSize, barHeight, stftParam, freqLength);
-			Path file=dirImageOutput.resolve(seq.getWaveFileName()+"-"+seq.getPosition()+"-"+seq.getLength()+".png");
-			ImageIO.write(image, "PNG", file.toFile());
-			break;
+			ImageIO.write(image, "PNG", fileImageOutput.toFile());
 		}
 	}
 	
