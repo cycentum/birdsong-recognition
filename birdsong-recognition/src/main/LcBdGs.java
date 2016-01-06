@@ -51,7 +51,6 @@ import errorcomputation.ErrorSaving;
 import errorcomputation.Levenshtein;
 import errorcomputation.Matching;
 import no.uib.cipr.matrix.NotConvergedException;
-import utils.CollectionUtils;
 import utils.DnnUtils;
 import utils.Executor;
 import utils.Pair;
@@ -86,18 +85,18 @@ public class LcBdGs
 		 * Change them according to your environment.
 		 *********************************************************/
 		//Cuda.
-		Path fileCudnnLibrary=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\cudnn64_70.dll");
-		Path fileCudaKernel=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\kernel.cu.ptx");
+		Path fileCudnnLibrary=Paths.get("C:\\path\\in\\your\\deivce\\cudnn64_70.dll");
+		Path fileCudaKernel=Paths.get("C:\\path\\in\\your\\deivce\\kernel.cu.ptx");
 		
 		//Data.
-		Path dirWave=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\Wave");
-		Path fileAllSequences=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Data\\Bird"+DnnTmp.birdIndex+"\\AllSequences.xml");
+		Path dirWave=Paths.get("C:\\path\\in\\your\\deivce\\Bird0\\Wave");
+		Path fileAllSequences=Paths.get("C:\\path\\in\\your\\deivce\\Bird0\\Annotations.xml");
 		
 		//Outputs.
-		Path fileDnnParameter=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\WeightLcBdGs");
-		Path fileDnnOutput=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\OutputLcBdGs");
-		Path fileOutputSequence=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\OutputSequenceLcBdGs.xml");
-		Path fileError=Paths.get("I:\\koumura\\MultiDays2\\BirdsongRecognition\\Result\\Bird"+DnnTmp.birdIndex+"\\ErrorLcBdGs.xml");
+		Path fileDnnParameter=Paths.get("C:\\path\\in\\your\\deivce\\Bird0\\WeightLcBdGs");
+		Path fileDnnOutput=Paths.get("C:\\path\\in\\your\\deivce\\Bird0\\OutputLcBdGs");
+		Path fileOutputSequence=Paths.get("C:\\path\\in\\your\\deivce\\Bird0\\OutputSequenceLcBdGs.xml");
+		Path fileError=Paths.get("C:\\path\\in\\your\\deivce\\Bird0\\ErrorLcBdGs.xml");
 				
 		
 		/**********************************************************
