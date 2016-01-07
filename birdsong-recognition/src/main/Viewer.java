@@ -49,7 +49,7 @@ import utils.SoundUtils;
 /**
  * A viewer of a spectrogram with annotations.
  * It shows a spectrogram with annotations in {@link JFrame} and save as a PNG at the same time.
- * Before the execution, paths to the necessary files must be set according to the users' computation environment.
+ * Before the execution, paths to the necessary files must be set according to the users' computational environment.
  * @author koumura
  *
  */

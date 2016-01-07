@@ -34,6 +34,7 @@ import jcuda.driver.JCudaDriver;
 
 /**
  * A class to call custom-written kernels.
+ * {@link #destroy()} must be called before termination.
  * @author koumura
  *
  */

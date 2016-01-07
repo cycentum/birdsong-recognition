@@ -59,9 +59,9 @@ import utils.SoundUtils;
 
 /**
  * A class that contains an entry point for training and recognition by the BD -&gt; LC -&gt; GS arrangement.
- * Before the execution, paths to the necessary files must be set according to the users' computation environment.
+ * Before the execution, paths to the necessary files must be set according to the users' computational environment.
  * Users can modify these codes to perform the computation matching their own purposes.
- * Step-by-step descriptions are given by comments in {@link #main(Executor)}
+ * Step-by-step descriptions are given by the comments in {@link #main(Executor)}
  * @author koumura
  */
 public class BdLcGs 
@@ -97,7 +97,7 @@ public class BdLcGs
 		
 		//Data.
 		Path dirWave=Paths.get("C:\\path\\in\\your\\deivce\\Bird0\\Wave");
-		Path fileAllSequences=Paths.get("C:\\path\\in\\your\\deivce\\Bird0\\Annotations.xml");
+		Path fileAnnotations=Paths.get("C:\\path\\in\\your\\deivce\\Bird0\\Annotations.xml");
 		
 		//Outputs.
 		Path fileThresholdingParameter=Paths.get("C:\\path\\in\\your\\deivce\\Bird0\\ThresholdBdLcGs");
@@ -147,7 +147,7 @@ public class BdLcGs
 		 * Reading sequences.
 		 *********************************************************/
 		MersenneTwister random=new MersenneTwister(randomSeed);
-		ArrayList<Sequence> allSequence=Sequence.readXml(fileAllSequences);
+		ArrayList<Sequence> allSequence=Sequence.readXml(fileAnnotations);
 		int samplingRate=(int)SoundUtils.checkSamplingRate(allSequence.stream().map(s->s.getWaveFileName()).collect(Collectors.toList()), dirWave);
 		LabelList labelList=Sequence.LabelList.create(allSequence);
 		int trainingSequenceLength=(int)(trainingSequenceLengthSec*samplingRate);
@@ -187,7 +187,7 @@ public class BdLcGs
 		IntBinaryOperator softmaxSizeFunc=(numUpperLabel, numLowreLabel)->numUpperLabel*numLowreLabel;
 		HyperParam dnnHyperParam=new HyperParam(stftParam, dpssParam, localInputHeight, localInputHeight, 1, freqOffset, freqLength, inputHeightUpper, batchSizeUpper, numIter, numConvChannel, fullConnectionSize);
 		
-		//Computing mean & sd of training spectrogram for input normalization.
+		//Computing mean & sd of the training spectrogram for input normalization.
 		HashMap<Sequence, float[]> spectrogram=SoundUtils.spectrogram(Sequence.wavePositionMap(trainingSequence, dirWave), stftParam, dpssParam, freqOffset, freqLength);
 		double[] specMeanSd=SoundUtils.spectrogramMeanSd(trainingSequence.stream().map(s->spectrogram.get(s)).collect(Collectors.toList()));
 		Config dnnConfig=new Config(verbose, silentLabelFunc, softmaxSizeFunc, specMeanSd, fileCudaKernel, fileCudnnLibrary, dirWave, backwardAlgorithm);

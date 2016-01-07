@@ -122,7 +122,7 @@ public class ViterbiSequencer
 	}
 	
 	/**
-	 * This class handles constraints of state transitions.
+	 * This interface handles constraints of state transitions.
 	 * @author koumura
 	 *
 	 */

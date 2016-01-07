@@ -123,7 +123,7 @@ public class HmmComputation
 	}
 	
 	/**
-	 * Computes trainsition probability from training data.
+	 * Computes trainsition probability from the training data.
 	 * @return transition probability
 	 */
 	public static double[][][] transitionProbability(List<Sequence> trainingSequence, LabelList labelList, HyperParam hyperParam)
@@ -134,7 +134,7 @@ public class HmmComputation
 	}
 	
 	/**
-	 * Converts continuous outputs of a DNN to segmented observation probabilities for HMM. Used in the BD -&gt; LC -&gt; GS arrangement.
+	 * Converts continuous outputs of a DNN to segmented observation probabilities for an HMM. Used in the BD -&gt; LC -&gt; GS arrangement.
 	 * @param posteriorProb Outputs of a DNN
 	 * @return Observation probability
 	 */
@@ -150,7 +150,7 @@ public class HmmComputation
 	}
 	
 	/**
-	 * Performs global sequencing with a HMM. Used in the BD -&gt; LC -&gt; GS arrangement.
+	 * Performs global sequencing with an HMM. Used in the BD -&gt; LC -&gt; GS arrangement.
 	 * @return Recognized elements in each input sequence.
 	 */
 	public static HashMap<Sequence, ArrayList<Note>> globalSequencing(HashMap<Sequence, ArrayList<double[]>> observationProb, double[][][] transitionProb, LabelList labelList, HashMap<Sequence, ArrayList<int[]>> soundInterval, HyperParam hyperParam, Config config) throws InterruptedException, ExecutionException
@@ -192,7 +192,7 @@ public class HmmComputation
 	}
 
 	/**
-	 * Converts continuous outputs of a DNN into continuous observation probabilities for HMM. Used in the LC -&gt; BD & GS and LC & GS -&gt; BD & GS arrangements.
+	 * Converts continuous outputs of a DNN into continuous observation probabilities for am HMM. Used in the LC -&gt; BD & GS and LC & GS -&gt; BD & GS arrangements.
 	 * @param posteriorProb Outputs of a DNN
 	 * @return Observation probability
 	 */
@@ -222,7 +222,7 @@ public class HmmComputation
 	}
 	
 	/**
-	 * Performs global sequencing with a HMM. Used in the LC -&gt; BD & GS and LC & GS -&gt; BD & GS arrangements.
+	 * Performs global sequencing with an HMM. Used in the LC -&gt; BD & GS and LC & GS -&gt; BD & GS arrangements.
 	 * @return Recognized elements in each input sequence.
 	 */
 	public static HashMap<Sequence, ArrayList<Note>> globalSequencingWithBoundaryDetection(HashMap<Sequence, ArrayList<double[]>> observationProb, double[][][] transitionProb, LabelList labelList, HyperParam hyperParam, Config config) throws InterruptedException, ExecutionException

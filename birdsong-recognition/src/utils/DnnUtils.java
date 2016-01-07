@@ -57,6 +57,12 @@ public class DnnUtils
 		CONV, POOLING;
 	}
 	
+	/**
+	 * Adjusts the input size so that there would be no remainders in the upper convolutional and pooling layers.
+	 * @param filterSize
+	 * @param inputSize
+	 * @return
+	 */
 	public static int nextSmallestInputSize(List<Pair<LayerType, Integer>> filterSize, int inputSize)
 	{
 		int scale=1, addition=0;
@@ -78,6 +84,11 @@ public class DnnUtils
 		return scale*MathUtils.ceil(inputSize-addition, scale)+addition;
 	}
 	
+	/**
+	 * Products of strides in all pooling layers.
+	 * @param filterSize
+	 * @return
+	 */
 	public static int sumStride(List<Pair<LayerType, Integer>> filterSize)
 	{
 		int stride=1;
@@ -88,6 +99,9 @@ public class DnnUtils
 		return stride;
 	}
 	
+	/**
+	 * @return Filter size of the layers used in this program.
+	 */
 	public static ArrayList<Pair<LayerType, Integer>> filterSizeList525242()
 	{
 		ArrayList<Pair<LayerType, Integer>> filterSizeList=new ArrayList<>();
@@ -179,6 +193,11 @@ public class DnnUtils
 		}
 	}
 	
+	/**
+	 * Copies parameters from layers. This method does not transfer data between the host and the device.
+	 * @param layer
+	 * @return
+	 */
 	public static ArrayList<float[]> copyParamFromLayer(ArrayList<Layer> layer)
 	{
 		ArrayList<float[]> param=new ArrayList<float[]>();
@@ -191,6 +210,11 @@ public class DnnUtils
 		return param;
 	}
 	
+	/**
+	 * Copies parameters to layers. This method does not transfer data between the host and the device.
+	 * @param src
+	 * @param dst
+	 */
 	public static void copyParamToLayer(ArrayList<float[]> src, ArrayList<Layer> dst)
 	{
 		{

@@ -31,7 +31,7 @@ import utils.ArrayUtils;
 import utils.CollectionUtils;
 
 /**
- * A class to compute the Levenshtein error.
+ * A class to compute Levenshtein errors.
  * @author koumura
  *
  */

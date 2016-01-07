@@ -36,7 +36,7 @@ import utils.ArrayUtils;
 import utils.CollectionUtils;
 
 /**
- * A class to compute the matching error.
+ * A class to compute matching errors.
  * @author koumura
  *
  */
@@ -74,7 +74,7 @@ public class Matching
 	}
 	
 	/**
-	 * @return matchPosition
+	 * @return Matched Positions
 	 */
 	private static LinkedList<Integer> matchSingleLabel(ArrayList<int[]> correctInterval, ArrayList<int[]> answerInterval, int sequenceLength)
 	{
@@ -169,9 +169,9 @@ public class Matching
 	}
 	
 	/**
-	 * @param correctSpecLabelInterval int[](begin, length, label)
-	 * @param answerSpecLabelInterval int[](begin, length, label)
-	 * @return matchPosition
+	 * @param correctSpecLabelInterval int[](start, length, label)
+	 * @param answerSpecLabelInterval int[](start, length, label)
+	 * @return Matched Positions
 	 */
 	private static LinkedList<Integer> compMatching(ArrayList<int[]> correctSpecLabelInterval, ArrayList<int[]> answerSpecLabelInterval, int sequenceSpecLength)
 	{
@@ -195,8 +195,8 @@ public class Matching
 	}
 	
 	/**
-	 * @param correctSpecLabelInterval int[](begin, length, label)
-	 * @param answerSpecLabelInterval int[](begin, length, label)
+	 * @param correctSpecLabelInterval int[](start, length, label)
+	 * @param answerSpecLabelInterval int[](start, length, label)
 	 * @return Total length of matched intervals.
 	 */
 	public static int computeMatchedLength(ArrayList<int[]> correctSpecLabelInterval, ArrayList<int[]> answerSpecLabelInterval, int sequenceSpecLength)

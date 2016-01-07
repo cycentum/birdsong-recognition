@@ -292,7 +292,7 @@ public class BatchData
 	}
 	
 	/**
-	 * Creates {@link BatchData} by loading wave files and converting them into spectrogram.  
+	 * Creates {@link BatchData} by loading wave files and converting them into spectrograms.  
 	 * 
 	 * @param numLowerLabel Number of sub-divisions in a single element.
 	 * @param silentLabelFunc A converter from the number of labels and sub-divisions to the index for the silent label.
@@ -302,7 +302,7 @@ public class BatchData
 	 * @param dpssParam Parameter for discrete prolate spheroidal sequences. 
 	 * @param freqOffset Beginning of the frequency band.
 	 * @param freqLength Length of the frequency band.
-	 * @param spectrogramMeanSd Mean and SD of the spectrograms in training data. Used for input scaling.
+	 * @param spectrogramMeanSd Mean and SD of the spectrograms in the training data. Used for input scaling.
 	 * @param inputHeightUpper Upper value of the combined input spectrogram.
 	 * @return
 	 * @throws IOException

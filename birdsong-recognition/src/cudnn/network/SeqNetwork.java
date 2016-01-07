@@ -328,7 +328,7 @@ public class SeqNetwork implements Model
 	}
 	
 	/**
-	 * A label is valid if and only if label>=0
+	 * A label is valid if and only if the label>=0
 	 * @return int[labelShiftUpperH*labelShiftUpperW]
 	 */
 	public int[] countValidLabelSize(byte[] label)

@@ -25,6 +25,11 @@ import org.apache.commons.math3.random.MersenneTwister;
 
 public class RandomUtils
 {
+	/**
+	 * @param size
+	 * @param random
+	 * @return Randomly ordered indices.
+	 */
 	public static int[] permutation(int size, MersenneTwister random)
 	{
 		int[] index=new int[size];
@@ -38,6 +43,11 @@ public class RandomUtils
 		}
 		return index;
 	}
+	/**
+	 * @param list
+	 * @param random
+	 * @return Randomly permutated list.
+	 */
 	public static <T> ArrayList<T> permutation(ArrayList<T> list, MersenneTwister random)
 	{
 		int[] index=permutation(list.size(), random);

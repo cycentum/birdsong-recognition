@@ -289,7 +289,7 @@ public class Sequence
 	}
 	
 	/**
-	 * Extracts sequences with limited total length.
+	 * Randomly extracts sequences with limited total length.
 	 * @param sequenceLength0Upper
 	 * @param random
 	 * @param sequence

@@ -45,7 +45,7 @@ import no.uib.cipr.matrix.NotConvergedException;
 import utils.DnnUtils;
 
 /**
- * This class performe training and recognitino of a DNN.
+ * This class perform training and recognitino of a DNN.
  * Hyper parameters and other configurations must be set in {@link HyperParam} and {@link Config}, respectively.
  * Trained parameters are handled in {@link Param}.
  * 
@@ -122,8 +122,8 @@ public class DnnComputation
 	}
 	
 	/**
-	 * Recognition, using trained parameter.
-	 * @param param trained paramter.
+	 * Recognition, using trained parameters.
+	 * @param param Trained paramters.
 	 */
 	public static HashMap<Sequence, float[]> recognition(ArrayList<Sequence> validationSequence, LabelList labelList, Param param, HyperParam hyperParam, Config config) throws IOException, UnsupportedAudioFileException, NotConvergedException, CudaException, CudnnException
 	{

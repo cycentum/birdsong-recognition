@@ -51,7 +51,7 @@ import no.uib.cipr.matrix.NotConvergedException;
 public class SoundUtils
 {
 	/**
-	 * Reads wave data from 16 bit linear PCM.
+	 * Reads wave data of 16 bit linear PCM.
 	 * @param file
 	 * @return
 	 * @throws UnsupportedAudioFileException
@@ -149,11 +149,22 @@ public class SoundUtils
 		return spectrogram(waveFilePosition, stftParam, dpssParam, frequencyOffset, frequencyLength).get(sequence);
 	}
 	
+	/**
+	 * Normalizes spectrograms by subtracting the mean and dividing by the SD.
+	 * @param spectrogram
+	 * @param mean
+	 * @param sd
+	 * @throws IOException
+	 */
 	public static void whiteSpectrogram(Collection<float[]> spectrogram, double mean, double sd) throws IOException
 	{
 		for(float[] spec: spectrogram) for(int i=0; i<spec.length; ++i) spec[i]=(float)((spec[i]-mean)/sd);
 	}
 	
+	/**
+	 * @param spectrogram
+	 * @return double[]{mean, sd}
+	 */
 	public static double[] spectrogramMeanSd(List<float[]> spectrogram)
 	{
 		SummaryStatistics stat=new SummaryStatistics();
@@ -186,6 +197,15 @@ public class SoundUtils
 		return samplingRate;
 	}
 	
+	/**
+	 * Draw the spectrogram in BufferedImage.
+	 * @param spectrogram
+	 * @param blackValue
+	 * @param whiteValue
+	 * @param frequencyLength
+	 * @param bottomMargin
+	 * @return
+	 */
 	public static BufferedImage spectrogramImage(float[] spectrogram, float blackValue, float whiteValue, int frequencyLength, int bottomMargin)
 	{
 		BufferedImage image=new BufferedImage(spectrogram.length/frequencyLength, frequencyLength+bottomMargin, BufferedImage.TYPE_INT_ARGB);

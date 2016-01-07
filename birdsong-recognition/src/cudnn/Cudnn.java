@@ -36,6 +36,7 @@ import cudnn.layer.Layer;
 
 /**
  * A class to handle the cudnn library.
+ * {@link #destroty()} must be called before termination.
  * @author koumura
  *
  */
