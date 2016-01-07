@@ -29,6 +29,13 @@ import cudnn.CudnnException;
 import cudnn.FloatType;
 import cudnn.Pointer;
 
+/**
+ * An implementation of weight updating by Adam.
+ * {@link #init()} and {@link #destroy()} must be called before and after the computation. 
+ * @see http://arxiv.org/abs/1412.6980
+ * @author koumura
+ *
+ */
 public class Adam
 {
 	private Model model;

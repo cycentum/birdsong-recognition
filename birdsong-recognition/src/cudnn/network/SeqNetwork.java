@@ -39,6 +39,17 @@ import cudnn.layer.SeqSoftmaxConvLayer;
 import cudnn.learner.Model;
 import jcuda.jcublas.JCublas;
 
+/**
+ * A class for a convolutional neural network.
+ * {@link #init(CudaDriver, Cudnn)} and {@link #cudaMalloc()} must be called before computation.
+ * {@link #initError()} must be called before computing output errors.
+ * {@link #destroy(Cudnn)} must be called before termination.
+ * The type of the floating points (single or double) must be consistent throughout the computation. Eg. if {@link FloatType#SINGLE} is given to the {@link #SeqNetwork(FloatType, ArrayList, int, Cudnn, IntType, int, int)}, {@link #setDataF(ArrayList)} must be used to set data, but not {@link #setDataD(ArrayList)}.
+ * **Dev means a pointer in a GPU.
+ * **F means float vlaues. **D means double values.
+ * @author koumura
+ *
+ */
 public class SeqNetwork implements Model
 {
 	private FloatType floatType;
@@ -162,17 +173,29 @@ public class SeqNetwork implements Model
 		}
 	}
 	
+	/**
+	 * Copies parameters from host to devide (GPU).
+	 * @throws CudaException
+	 */
 	public void copyParamToDev() throws CudaException
 	{
 		for(Layer la: layer) if(la instanceof ParamLayer) ((ParamLayer)la).copyParamToDev(floatType);		
 	}
 	
+	/**
+	 * Copies parameters from device (GPU) to host.
+	 * @throws CudaException
+	 */
 	public void copyParamFromDev() throws CudaException
 	{
 		for(Layer la: layer) if(la instanceof ParamLayer) ((ParamLayer)la).copyParamFromDev(floatType);
 	}
 	
-	public void copyDataToDeviceHeightDisp() throws CudaException
+	/**
+	 * Copies inputs from host to device (GPU).
+	 * @throws CudaException
+	 */
+	public void copyDataToDevice() throws CudaException
 	{
 		if(floatType==FloatType.SINGLE)
 		{
@@ -192,12 +215,20 @@ public class SeqNetwork implements Model
 		}
 	}
 	
+	/**
+	 * Copies desired labels from host to device (GPU).
+	 * @throws CudaException
+	 */
 	public void copyLabelToDevice(byte[] label) throws CudaException
 	{
 		if(label.length!=batchSize*softMaxLayer.getLabelHeight()*softMaxLayer.getLabelWidth()) System.err.println("label.length="+label.length+" != expected="+batchSize*softMaxLayer.getLabelHeight()*softMaxLayer.getLabelWidth());
 		Cuda.memcpyAsyncHostToDevice(labelDev, label);
 		this.labelB=label;
 	}
+	/**
+	 * Copies desired labels from host to device (GPU).
+	 * @throws CudaException
+	 */
 	public void copyLabelToDevice(int[] label) throws CudaException
 	{
 		if(label.length!=batchSize*softMaxLayer.getLabelHeight()*softMaxLayer.getLabelWidth()) System.err.println("label.length="+label.length+" != expected="+batchSize*softMaxLayer.getLabelHeight()*softMaxLayer.getLabelWidth());
@@ -297,7 +328,7 @@ public class SeqNetwork implements Model
 	}
 	
 	/**
-	 * label is valid if and only if label>=0
+	 * A label is valid if and only if label>=0
 	 * @return int[labelShiftUpperH*labelShiftUpperW]
 	 */
 	public int[] countValidLabelSize(byte[] label)

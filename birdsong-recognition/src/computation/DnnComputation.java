@@ -44,9 +44,20 @@ import jcuda.jcublas.JCublas;
 import no.uib.cipr.matrix.NotConvergedException;
 import utils.DnnUtils;
 
+/**
+ * This class performe training and recognitino of a DNN.
+ * Hyper parameters and other configurations must be set in {@link HyperParam} and {@link Config}, respectively.
+ * Trained parameters are handled in {@link Param}.
+ * 
+ * @author koumura
+ *
+ */
 public class DnnComputation
 {
-	public static Param trainLocalRecognition(ArrayList<Sequence> trainingSequence, LabelList labelList, MersenneTwister random, HyperParam hyperParam, Config config) throws IOException, CudnnException, CudaException, UnsupportedAudioFileException, NotConvergedException
+	/**
+	 * Parameter training.
+	 */
+	public static Param training(ArrayList<Sequence> trainingSequence, LabelList labelList, MersenneTwister random, HyperParam hyperParam, Config config) throws IOException, CudnnException, CudaException, UnsupportedAudioFileException, NotConvergedException
 	{
 		BatchData data=BatchData.create(trainingSequence, random, hyperParam.numSubLabel, config.silentLabelFunc, hyperParam.finalInputHeight, config.dirWaveFile, hyperParam.stftParam, hyperParam.dpssParam, hyperParam.freqOffset, hyperParam.freqLength, config.spectrogramMeanSd, hyperParam.inputHeightUpper);
 		data.pack(data.getPackedHeight(), hyperParam.freqLength, hyperParam.batchSizeUpper, labelList, DnnUtils.filterSizeList525242());
@@ -55,7 +66,7 @@ public class DnnComputation
 		Cudnn cudnn=new Cudnn(config.fileCudnnLibrary);
 		CudaDriver driver=new CudaDriver();
 		driver.load(config.fileCudaKernel.toAbsolutePath().toString());
-		SeqNetwork network=DnnUtils.netinnetNetwork(data.getDataLayerHeight(), hyperParam.freqLength, config.softmaxSizeFunc.applyAsInt(labelList.size(), hyperParam.numSubLabel), data.getMaxBatchSize(), cudnn, driver, hyperParam.localInputHeight, hyperParam.finalInputHeight, config.backwardAlogorithm, hyperParam.numConvChannel, hyperParam.fullConnectionSize);
+		SeqNetwork network=DnnUtils.createNetwork(data.getDataLayerHeight(), hyperParam.freqLength, config.softmaxSizeFunc.applyAsInt(labelList.size(), hyperParam.numSubLabel), data.getMaxBatchSize(), cudnn, driver, hyperParam.localInputHeight, hyperParam.finalInputHeight, config.backwardAlogorithm, hyperParam.numConvChannel, hyperParam.fullConnectionSize);
 
 		network.cudaMalloc();
 		if(config.verbose)
@@ -76,7 +87,7 @@ public class DnnComputation
 				network.setDataF(data.getBatchData().get(batch));
 				network.copyLabelToDevice(data.getBatchLabel().get(batch));
 				network.setLabelShift(shift, 0);
-				network.copyDataToDeviceHeightDisp();
+				network.copyDataToDevice();
 //				Cuda.deviceSynchronize();
 				learner.iteration();
 			}
@@ -90,7 +101,7 @@ public class DnnComputation
 					for(int shift=0; shift<network.getLabelShiftUpperH(); ++shift)
 					{
 						network.setLabelShift(shift, 0);
-						network.copyDataToDeviceHeightDisp();
+						network.copyDataToDevice();
 //						Cuda.deviceSynchronize();
 						network.compForward(driver, cudnn);
 						error+=network.compError(driver);
@@ -110,7 +121,11 @@ public class DnnComputation
 		return new Param(DnnUtils.copyParamFromLayer(network.getLayer()));
 	}
 	
-	public static HashMap<Sequence, float[]> localRecognition(ArrayList<Sequence> validationSequence, LabelList labelList, Param param, HyperParam hyperParam, Config config) throws IOException, UnsupportedAudioFileException, NotConvergedException, CudaException, CudnnException
+	/**
+	 * Recognition, using trained parameter.
+	 * @param param trained paramter.
+	 */
+	public static HashMap<Sequence, float[]> recognition(ArrayList<Sequence> validationSequence, LabelList labelList, Param param, HyperParam hyperParam, Config config) throws IOException, UnsupportedAudioFileException, NotConvergedException, CudaException, CudnnException
 	{
 		BatchData data=BatchData.create(validationSequence, null, hyperParam.numSubLabel, config.silentLabelFunc, hyperParam.finalInputHeight, config.dirWaveFile, hyperParam.stftParam, hyperParam.dpssParam, hyperParam.freqOffset, hyperParam.freqLength, config.spectrogramMeanSd, hyperParam.inputHeightUpper);
 		data.pack(data.getPackedHeight(), hyperParam.freqLength, hyperParam.batchSizeUpper, labelList, DnnUtils.filterSizeList525242());
@@ -119,7 +134,7 @@ public class DnnComputation
 		Cudnn cudnn=new Cudnn(config.fileCudnnLibrary);
 		CudaDriver driver=new CudaDriver();
 		driver.load(config.fileCudaKernel.toAbsolutePath().toString());
-		SeqNetwork network=DnnUtils.netinnetNetwork(data.getDataLayerHeight(), hyperParam.freqLength, config.softmaxSizeFunc.applyAsInt(labelList.size(), hyperParam.numSubLabel), data.getMaxBatchSize(), cudnn, driver, hyperParam.localInputHeight, hyperParam.finalInputHeight, config.backwardAlogorithm, hyperParam.numConvChannel, hyperParam.fullConnectionSize);
+		SeqNetwork network=DnnUtils.createNetwork(data.getDataLayerHeight(), hyperParam.freqLength, config.softmaxSizeFunc.applyAsInt(labelList.size(), hyperParam.numSubLabel), data.getMaxBatchSize(), cudnn, driver, hyperParam.localInputHeight, hyperParam.finalInputHeight, config.backwardAlogorithm, hyperParam.numConvChannel, hyperParam.fullConnectionSize);
 		SeqSoftmaxConvLayer outputLayer=(SeqSoftmaxConvLayer)network.getLayer().get(network.getLayer().size()-1);
 
 		network.cudaMalloc();
@@ -133,7 +148,7 @@ public class DnnComputation
 			for(int shift=0; shift<network.getLabelShiftUpperH(); ++shift)
 			{
 				network.setLabelShift(shift, 0);
-				network.copyDataToDeviceHeightDisp();
+				network.copyDataToDevice();
 //				Cuda.deviceSynchronize();
 				network.compForward(driver, cudnn);
 				float[] o=Cuda.memcpyDeviceToFloatArray(outputLayer.getValueDev(), outputLayer.sizeCHW()*data.getMaxBatchSize());

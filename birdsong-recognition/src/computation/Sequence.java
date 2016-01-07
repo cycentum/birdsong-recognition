@@ -38,6 +38,11 @@ import utils.Pair;
 import utils.RandomUtils;
 import utils.XmlUtils;
 
+/**
+ * This class handles annotations of sound data.
+ * @author koumura
+ *
+ */
 public class Sequence
 {
 	private String waveFileName;
@@ -132,6 +137,9 @@ public class Sequence
 		return true;
 	}
 	
+	/**
+	 * Writes an XML file.
+	 */
 	public static void writeOutputSequence(HashMap<Sequence, ArrayList<Note>> outputSequence, Path file) throws IOException
 	{
 		Element rootEl=XmlUtils.rootElement("SequenceNoteInterval");
@@ -168,6 +176,9 @@ public class Sequence
 		return Integer.BYTES*4+waveFileName.getBytes().length;
 	}
 	
+	/**
+	 * Serializes itself into a byte array.
+	 */
 	public void serialize(ByteBuffer buf)
 	{
 		byte[] b=waveFileName.getBytes();
@@ -177,6 +188,9 @@ public class Sequence
 		buf.putInt(length);
 	}
 	
+	/**
+	 * Deserializes from a byte array.
+	 */
 	public static Sequence deserialize(ByteBuffer buf, HashMap<Sequence, Sequence> sequenceMap)
 	{
 		int byteLen=buf.getInt();
@@ -189,6 +203,11 @@ public class Sequence
 		return seq;
 	}
 	
+	/**
+	 * Sound elements in a song.
+	 * @author koumura
+	 *
+	 */
 	public static class Note
 	{
 		private int position, length;
@@ -269,6 +288,13 @@ public class Sequence
 		return wavePositionMap;
 	}
 	
+	/**
+	 * Extracts sequences with limited total length.
+	 * @param sequenceLength0Upper
+	 * @param random
+	 * @param sequence
+	 * @return
+	 */
 	public static Pair<ArrayList<Sequence>, ArrayList<Sequence>> extract(int sequenceLength0Upper, MersenneTwister random, List<Sequence> sequence)
 	{
 		ArrayList<Sequence> all=sequence.stream().collect(CollectionUtils.arrayListCollector());
@@ -287,6 +313,11 @@ public class Sequence
 		return new Pair<>(sequence0, sequence1);
 	}
 	
+	/**
+	 * This class handles conversion of a label string and the corresponding label index.
+	 * @author koumura
+	 *
+	 */
 	public static class LabelList
 	{
 		private ArrayList<String> list;

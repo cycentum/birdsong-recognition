@@ -19,6 +19,11 @@
  */
 package cudnn;
 
+/**
+ * Activation functions.
+ * @author koumura
+ *
+ */
 public enum ActivationMode
 {
 	SIGMOID(CudnnLibrary.cudnnActivationMode_t.CUDNN_ACTIVATION_SIGMOID), 

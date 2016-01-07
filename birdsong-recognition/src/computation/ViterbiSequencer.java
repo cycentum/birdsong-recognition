@@ -26,6 +26,11 @@ import java.util.LinkedList;
 
 import utils.ArrayUtils;
 
+/**
+ * This class performs sequencing by the Viterbi algorithm, used in {@link HmmComputation}.
+ * @author koumura
+ *
+ */
 public class ViterbiSequencer
 {
 	private StateTransition transition;
@@ -40,6 +45,9 @@ public class ViterbiSequencer
 		this.srcState = new ArrayList<>();
 	}
 
+	/**
+	 * Computes label sequences that would generate the given observation probability.
+	 */
 	public ArrayList<Integer> compLabelSequence(ArrayList<double[]> observationProbability)
 	{
 		for(int t=srcState.size(); t<observationProbability.size()-1; ++t) srcState.add(new int[transition.numState()]);
@@ -113,6 +121,11 @@ public class ViterbiSequencer
 		return labelSequence;
 	}
 	
+	/**
+	 * This class handles constraints of state transitions.
+	 * @author koumura
+	 *
+	 */
 	public static interface StateTransition
 	{
 		int[] dstState(int srcState);
@@ -123,8 +136,10 @@ public class ViterbiSequencer
 		int numLabel();
 		int[] tailState();
 	}
+	
 	/**
-	 * label={0, 1, ..., numLabel-1, headState}
+	 * Constraints for a first order Markov process.
+	 * label=int[]{0, 1, ..., numLabel-1, headState}.
 	 */
 	public static class FirstOrderTransition implements StateTransition
 	{
@@ -132,7 +147,7 @@ public class ViterbiSequencer
 		private ArrayList<double[]> transitionProbability;
 		
 		/**
-		 * @param transitionProbability get(srcState)[dstLabel]
+		 * @param transitionProbability List(state0)[state1] = transition probability from state0 to state1.
 		 */
 		public FirstOrderTransition(ArrayList<double[]> transitionProbability)
 		{
@@ -161,6 +176,12 @@ public class ViterbiSequencer
 		@Override
 		public int[] tailState(){return dstLabel;}
 	}
+	
+	/**
+	 * Constraints for a second order Markov process without sub-divisions in a state.
+	 * @author koumura
+	 *
+	 */
 	public static class SecondOrderTransition implements StateTransition
 	{
 		private int[] dstLabel, tailState;
@@ -169,6 +190,9 @@ public class ViterbiSequencer
 		private double[] evenTransitionProbability;
 		private ArrayList<int[]> dstState;
 		
+		/**
+		 * @param transitionProbability double[state0][state1][state2] = transition probability from consecutive state0 & state1 to state2
+		 */
 		public SecondOrderTransition(double[][][] transitionProbability)
 		{
 			this.dstLabel = ArrayUtils.createSequence(0, transitionProbability.length);
@@ -246,6 +270,12 @@ public class ViterbiSequencer
 			return label0*numLabel()+label1;
 		}
 	}
+	
+	/**
+	 * Constraints for a second order Markov process with sub-divisions in a state.
+	 * @author koumura
+	 *
+	 */
 	public static class SecondOrderLowerTransition implements StateTransition
 	{
 		private ArrayList<int[]> dstState, dstLabel;
@@ -254,6 +284,11 @@ public class ViterbiSequencer
 		private ArrayList<Integer> stateLabel0, stateLabel1, stateLowerLabel;
 		private int[] tailState;
 
+		/**
+		 * @param upperTransitionProbability double[state0][state1][state2] = transition probability from consecutive state0 & state1 to state2
+		 * @param numUpperSoundLabel Number of labels (excluding the silent label).
+		 * @param numLowerSoundLabel Number of sub-divisions (excluding the silent label).
+		 */
 		public SecondOrderLowerTransition(double[][][] upperTransitionProbability, int numUpperSoundLabel, int numLowerSoundLabel)
 		{
 			this.numUpperSoundLabel=numUpperSoundLabel;
@@ -404,13 +439,13 @@ public class ViterbiSequencer
 		
 		private int silenceFullLabel(){return numLabel()-1;}
 		
-		public int fullLabel(int upperLabel, int lowerLabel)
+		private int fullLabel(int upperLabel, int lowerLabel)
 		{
 			if(upperLabel==numUpperSoundLabel||lowerLabel==numLowerSoundLabel) return silenceFullLabel();
 			return upperLabel*numLowerSoundLabel+lowerLabel;
 		}
 		
-		public int state(int label0, int label1, int lowerLabel)
+		private int state(int label0, int label1, int lowerLabel)
 		{
 			if(label1==numUpperSoundLabel) return headState();
 			return (label0*numUpperSoundLabel+label1)*(numLowerSoundLabel+1)+lowerLabel;

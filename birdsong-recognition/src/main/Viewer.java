@@ -46,6 +46,13 @@ import computation.Sequence.Note;
 import no.uib.cipr.matrix.NotConvergedException;
 import utils.SoundUtils;
 
+/**
+ * A viewer of a spectrogram with annotations.
+ * It shows a spectrogram with annotations in {@link JFrame} and save as a PNG at the same time.
+ * Before the execution, paths to the necessary files must be set according to the users' computation environment.
+ * @author koumura
+ *
+ */
 public class Viewer
 {
 	public static void main(String... arg) throws IOException, UnsupportedAudioFileException, NotConvergedException

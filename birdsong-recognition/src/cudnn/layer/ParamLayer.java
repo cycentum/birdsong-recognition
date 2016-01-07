@@ -24,6 +24,13 @@ import cudnn.CudaException;
 import cudnn.FloatType;
 import cudnn.Pointer;
 
+/**
+ * An interface for a layer with parameters (weights & biases).
+ * **Dev means a pointer in a GPU.
+ * **F means float vlaues. **D means double values.
+ * @author koumura
+ *
+ */
 public interface ParamLayer extends Layer
 {
 	float[] getWeightF();

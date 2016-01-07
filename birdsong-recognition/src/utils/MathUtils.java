@@ -38,6 +38,13 @@ public class MathUtils
 	
 	private static double square(double x){return x*x;}
 	
+	/**
+	 * Computes 0th order discrete prolate spheroidal sequences.
+	 * @param fftLength
+	 * @param nw Parameter for the DPSS.
+	 * @return
+	 * @throws NotConvergedException
+	 */
 	public static double[] dpss(int fftLength, int nw) throws NotConvergedException
 	{
 		double w=(double)nw/fftLength;

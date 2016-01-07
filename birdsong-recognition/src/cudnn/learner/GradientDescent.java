@@ -25,6 +25,12 @@ import cudnn.Cudnn;
 import cudnn.CudnnException;
 import jcuda.jcublas.JCublas;
 
+/**
+ * An implementation of weight updating by gradient decent.
+ * {@link #iteration(float, CudaDriver, Cudnn)} is for single precision floating point computation, and {@link #iteration(double, CudaDriver, Cudnn)} is for double precision floating point computation.
+ * @author koumura
+ *
+ */
 public class GradientDescent
 {
 	private Model model;
@@ -45,7 +51,7 @@ public class GradientDescent
 		updateParam(learningRate);
 	}
 	
-	public void updateParam(float learning_rate)
+	private void updateParam(float learning_rate)
 	{	
 		float alpha = -learning_rate;
 		for(int i=0; i<model.getParamSize().size(); ++i)
@@ -53,7 +59,7 @@ public class GradientDescent
 			JCublas.cublasSaxpy(model.getParamSize().get(i), alpha, model.getGradDev().get(i), 1, model.getParamDev().get(i), 1);
 		}
 	}
-	public void updateParam(double learning_rate)
+	private void updateParam(double learning_rate)
 	{	
 		double alpha = -learning_rate;
 		for(int i=0; i<model.getParamSize().size(); ++i)

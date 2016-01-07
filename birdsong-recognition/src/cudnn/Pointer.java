@@ -23,6 +23,11 @@ import java.util.LinkedList;
 
 import com.sun.jna.PointerUtils;
 
+/**
+ * A class to bridge {@link com.sun.jna.Pointer} and {@link jcuda.Pointer}
+ * @author koumura
+ *
+ */
 public class Pointer extends jcuda.Pointer
 {
 	private com.sun.jna.Pointer jnaPointer;

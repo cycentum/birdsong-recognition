@@ -26,8 +26,20 @@ import org.w3c.dom.Element;
 
 import utils.XmlUtils;
 
+/**
+ * A class for writing errors in an XML file.
+ * @author koumura
+ *
+ */
 public class ErrorSaving
 {
+	/**
+	 * Writes a Levenshtein error and a matching error in the XML file.
+	 * @param levenshteinError
+	 * @param matchingError
+	 * @param file
+	 * @throws IOException
+	 */
 	public static void writeXml(double levenshteinError, double matchingError, Path file) throws IOException
 	{
 		Element rootEl=XmlUtils.rootElement("Errors");

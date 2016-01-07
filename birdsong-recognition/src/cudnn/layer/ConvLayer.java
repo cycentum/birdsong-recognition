@@ -32,6 +32,14 @@ import cudnn.CudnnLibrary.cudnnConvolutionFwdPreference_t;
 import cudnn.FloatType;
 import cudnn.Pointer;
 
+/**
+ * A class for a convolutional layer.
+ * {@link #init(FloatType, Cudnn, int)} and {@link #cudaMalloc(FloatType, int)} must be called before computation.
+ * {@link #destroy(Cudnn)} must be called before termination of the program.
+ * **Dev means a pointer in a GPU.
+ * @author koumura
+ *
+ */
 public class ConvLayer implements ParamLayer, NonDataLayer
 {
 	private Layer lower;

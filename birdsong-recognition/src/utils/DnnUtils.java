@@ -100,7 +100,24 @@ public class DnnUtils
 		return filterSizeList;
 	}
 	
-	public static SeqNetwork netinnetNetwork(int dataLayerHeight, int inputWidth, int softMaxSize, int batchSize, Cudnn cudnn, CudaDriver driver, int localInputHeight, int finalInputHeight, ConvLayer.BackwardAlgorithm backwardAlgo, int numConvChannel, int fullConnectionSize) throws CudnnException, CudaException
+	/**
+	 * Creates a CDNN used in this program.
+	 * @param dataLayerHeight Height of the data layer.
+	 * @param inputWidth Width of the input spectrogram.
+	 * @param softMaxSize Number of the output labels.
+	 * @param batchSize
+	 * @param cudnn
+	 * @param driver
+	 * @param localInputHeight Height of the input in local recognition.
+	 * @param finalInputHeight Height of the input in global sequencing. In BD -gt; LC -gt; GS and LC -gt; BD & GS arrangements, it should be the same as localInputHeight.
+	 * @param backwardAlgo Algorithm for back-propagation in convolutional layers.
+	 * @param numConvChannel Number of channels in convolutional layers.
+	 * @param fullConnectionSize Dimension of the lower fully-connected layer.
+	 * @return CDNN.
+	 * @throws CudnnException
+	 * @throws CudaException
+	 */
+	public static SeqNetwork createNetwork(int dataLayerHeight, int inputWidth, int softMaxSize, int batchSize, Cudnn cudnn, CudaDriver driver, int localInputHeight, int finalInputHeight, ConvLayer.BackwardAlgorithm backwardAlgo, int numConvChannel, int fullConnectionSize) throws CudnnException, CudaException
 	{
 		DataLayer dataLayer=new DataLayer(1, dataLayerHeight, inputWidth);
 		ConvLayer conv1=new ConvLayer(numConvChannel, 5, 5, ActivationMode.RELU, dataLayer, backwardAlgo);
@@ -143,6 +160,12 @@ public class DnnUtils
 		return network;
 	}
 
+	/**
+	 * Initializes network parameters according to http://arxiv.org/abs/1502.01852.
+	 * @see http://arxiv.org/abs/1502.01852
+	 * @param layer
+	 * @param random
+	 */
 	public static void initParam(List<Layer> layer, MersenneTwister random)
 	{
 		for(Layer la: layer) if(la instanceof ParamLayer)

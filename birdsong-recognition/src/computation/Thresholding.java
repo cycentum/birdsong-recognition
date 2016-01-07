@@ -46,6 +46,15 @@ import utils.Pair;
 import utils.SoundUtils;
 import utils.XmlUtils;
 
+/**
+ * This class performs boundary detection by thresholding of sound amplitude.
+ * Used in the BD -&gt; LC -&gt; GS arrangement.
+ * Hyper parameters and other configurations must be set in {@link HyperParameter} and {@link Config}, respectively.
+ * Thresholds are stored in {@link Parameter}.
+ * 
+ * @author koumura
+ *
+ */
 public class Thresholding
 {
 	private static LinkedList<int[]> soundInterval(double[] amplitude, double threshold)
@@ -115,6 +124,9 @@ public class Thresholding
 		return ampAll;
 	}
 	
+	/**
+	 * Compute the best thresholds in the training data.
+	 */
 	public static Parameter train(Collection<Sequence> sequence, HyperParameter hyperParameter, Config config) throws InterruptedException, ExecutionException, UnsupportedAudioFileException, IOException, NotConvergedException
 	{
 		HashMap<Sequence, double[]> spectrogramAmplitude=spectrogramAmplitude(sequence, hyperParameter, config);
@@ -266,6 +278,10 @@ public class Thresholding
 		return parameter;
 	}
 	
+	/**
+	 * Performs boundary detection using trained thresholds.
+	 * @param parameter Trained thresholds.
+	 */
 	public static HashMap<Sequence, ArrayList<int[]>> boundaryDetection(Collection<Sequence> sequence, Parameter parameter, HyperParameter hyperParameter, Config config) throws IOException, UnsupportedAudioFileException, NotConvergedException
 	{
 		HashMap<Sequence, double[]> spectrogramAmplitude=spectrogramAmplitude(sequence, hyperParameter, config);
@@ -283,6 +299,13 @@ public class Thresholding
 		return noteList;
 	}
 	
+	/**
+	 * Converts continuous outputs of a DNN into discrete values by averaging within the detected intervals.
+	 * @param soundInterval Detected sound intervals.
+	 * @param output Continuous outputs of a DNN.
+	 * @param stftParam
+	 * @return Averaged outputs. 
+	 */
 	public static HashMap<Sequence, ArrayList<double[]>> averageOutput(HashMap<Sequence, ArrayList<int[]>> soundInterval, HashMap<Sequence, float[]> output, STFTParam stftParam)
 	{
 		HashMap<Sequence, ArrayList<double[]>> average=new HashMap<>(output.size()*4/3);

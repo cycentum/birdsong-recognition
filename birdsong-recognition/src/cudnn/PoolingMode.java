@@ -19,6 +19,11 @@
  */
 package cudnn;
 
+/**
+ * Types of pooling in pooling layers.
+ * @author koumura
+ *
+ */
 public enum PoolingMode
 {
 	MAX(CudnnLibrary.cudnnPoolingMode_t.CUDNN_POOLING_MAX),

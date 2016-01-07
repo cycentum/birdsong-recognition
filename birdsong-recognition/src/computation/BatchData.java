@@ -46,6 +46,12 @@ import utils.Pair;
 import utils.RandomUtils;
 import utils.SoundUtils;
 
+/**
+ * This class handles data for DNN computation.
+ * 
+ * @author koumura
+ *
+ */
 public class BatchData
 {
 	private ArrayList<ArrayList<float[]>> batchData;
@@ -110,7 +116,7 @@ public class BatchData
 		return spectrogram;
 	}
 
-	public BatchData(ArrayList<float[]> spectrogram, int packedHeight, ArrayList<ArrayList<Integer>> packedSpectrogram, List<Sequence> sequence, int numLowerLabel, IntBinaryOperator silentLabelFunc, int specMarginBegin, int specMarginEnd, int finalInputHeight, STFTParam stftParam)
+	private BatchData(ArrayList<float[]> spectrogram, int packedHeight, ArrayList<ArrayList<Integer>> packedSpectrogram, List<Sequence> sequence, int numLowerLabel, IntBinaryOperator silentLabelFunc, int specMarginBegin, int specMarginEnd, int finalInputHeight, STFTParam stftParam)
 	{
 		this.spectrogram = spectrogram;
 		this.packedHeight = packedHeight;
@@ -124,7 +130,7 @@ public class BatchData
 		this.stftParam=stftParam;
 	}
 	
-	public static ArrayList<ArrayList<Integer>> packedSpectrogramIndex(int heightUpper, List<float[]> spectrogram, MersenneTwister random, int inputWidth)
+	private static ArrayList<ArrayList<Integer>> packedSpectrogramIndex(int heightUpper, List<float[]> spectrogram, MersenneTwister random, int inputWidth)
 	{
 		int[] shuffleSpectrogram;
 		if(random!=null) shuffleSpectrogram=RandomUtils.permutation(spectrogram.size(), random);
@@ -174,6 +180,17 @@ public class BatchData
 		return inputData;
 	}
 	
+	/**
+	 * Packs input spectrograms for efficient computation. 
+	 * This method must be called before {@link #batch}.
+	 * 
+	 * @param packedHeight
+	 * @param inputWidth
+	 * @param batchSizeUpper
+	 * @param labelList
+	 * @param layerFilterSizeList
+	 * @throws IOException
+	 */
 	public void pack(int packedHeight, int inputWidth, int batchSizeUpper, LabelList labelList, ArrayList<Pair<DnnUtils.LayerType, Integer>> layerFilterSizeList) throws IOException
 	{
 		this.packedHeight=packedHeight;
@@ -220,6 +237,14 @@ public class BatchData
 		maxBatchSize=MathUtils.ceil(inputData.size(), numBatch);
 	}
 
+	/**
+	 * Makes batch inputs.
+	 * This method must be called before training or recognition with a DNN.
+	 * @param maxBatchSize
+	 * @param randomShuffle
+	 * @param inputWidth
+	 * @throws IOException
+	 */
 	public void batch(int maxBatchSize, MersenneTwister randomShuffle, int inputWidth) throws IOException
 	{
 		this.maxBatchSize=maxBatchSize;
@@ -255,6 +280,10 @@ public class BatchData
 		}
 	}
 	
+	/**
+	 * Counts the number of valid labels in the batch data.
+	 * @param network
+	 */
 	public void setValidLabelSize(SeqNetwork network)
 	{
 		batchValidLabelSize=new ArrayList<>(numBatch);
@@ -263,6 +292,24 @@ public class BatchData
 		sumValidLabelSize=batchValidLabelSize.stream().mapToInt(size->Arrays.stream(size).sum()).sum();
 	}
 	
+	/**
+	 * Creates {@link BatchData} by loading wave files and converting them into spectrogram.  
+	 * 
+	 * @param numLowerLabel Number of sub-divisions in a single element.
+	 * @param silentLabelFunc A converter from the number of labels and sub-divisions to the index for the silent label.
+	 * @param finalInputHeight Input height of the spectrogram, seen from the final output layer.
+	 * @param waveFileDir Directory of wave files.
+	 * @param stftParam Parameters for short time Fourier transformation.
+	 * @param dpssParam Parameter for discrete prolate spheroidal sequences. 
+	 * @param freqOffset Beginning of the frequency band.
+	 * @param freqLength Length of the frequency band.
+	 * @param spectrogramMeanSd Mean and SD of the spectrograms in training data. Used for input scaling.
+	 * @param inputHeightUpper Upper value of the combined input spectrogram.
+	 * @return
+	 * @throws IOException
+	 * @throws UnsupportedAudioFileException
+	 * @throws NotConvergedException
+	 */
 	public static BatchData create(List<Sequence> sequence, MersenneTwister random, int numLowerLabel, IntBinaryOperator silentLabelFunc, int finalInputHeight, Path waveFileDir, STFTParam stftParam, int dpssParam, int freqOffset, int freqLength, double[] spectrogramMeanSd, int inputHeightUpper) throws IOException, UnsupportedAudioFileException, NotConvergedException
 	{
 		int marginBegin=finalInputHeight/2;

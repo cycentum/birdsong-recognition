@@ -25,6 +25,13 @@ import cudnn.FloatType;
 import cudnn.IntType;
 import cudnn.Pointer;
 
+/**
+ * An interface for an output layer.
+ * {@link #initError(FloatType)} must be called before computing the output error.
+ * **Dev means a pointer in a GPU.
+ * @author koumura
+ *
+ */
 public interface OutputLayer extends Layer
 {
 	double compError(CudaDriver driver, Pointer labelDev, IntType labelType, FloatType floatType) throws CudaException;

@@ -30,6 +30,11 @@ import computation.Sequence.Note;
 import utils.ArrayUtils;
 import utils.CollectionUtils;
 
+/**
+ * A class to compute the Levenshtein error.
+ * @author koumura
+ *
+ */
 public class Levenshtein
 {
 	private static <T> Result compute(ArrayList<T> sequence0, ArrayList<T> sequence1)
@@ -97,6 +102,11 @@ public class Levenshtein
 		return result;
 	}
 	
+	/**
+	 * @param noteSequence0
+	 * @param noteSequence1
+	 * @return Levenshtein distance.
+	 */
 	public static int computeDistance(List<Note> noteSequence0, List<Note> noteSequence1)
 	{
 		ArrayList<String> labelSeq0=noteSequence0.stream().map(n->n.getLabel()).collect(CollectionUtils.arrayListCollector());
@@ -104,6 +114,10 @@ public class Levenshtein
 		return compute(labelSeq0, labelSeq1).distance;
 	}
 
+	/**
+	 * @param outputSequence Map of correct sequences to output intervals.
+	 * @return Levenshtein error.
+	 */
 	public static double computeError(Map<Sequence, ArrayList<Note>> outputSequence)
 	{
 		int numLabel=0, distance=0;
@@ -115,7 +129,7 @@ public class Levenshtein
 		return (double)distance/numLabel;
 	}
 	
-	public static class Result
+	private static class Result
 	{
 		private LinkedList<int[]> alignedIndex;
 		private int distance;
@@ -126,8 +140,8 @@ public class Levenshtein
 			this.distance = distance;
 		}
 
-		public LinkedList<int[]> getAlignedIndex(){return alignedIndex;}
+		private LinkedList<int[]> getAlignedIndex(){return alignedIndex;}
 
-		public int getDistance(){return distance;}
+		private int getDistance(){return distance;}
 	}
 }

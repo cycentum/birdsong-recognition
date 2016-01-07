@@ -22,6 +22,11 @@ package utils;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * {@link ExecutorService} and the number of thread are handled in the same class for convenience.
+ * @author koumura
+ *
+ */
 public class Executor
 {
 	private ExecutorService executor;

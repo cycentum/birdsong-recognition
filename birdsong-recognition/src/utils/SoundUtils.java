@@ -50,6 +50,13 @@ import no.uib.cipr.matrix.NotConvergedException;
 
 public class SoundUtils
 {
+	/**
+	 * Reads wave data from 16 bit linear PCM.
+	 * @param file
+	 * @return
+	 * @throws UnsupportedAudioFileException
+	 * @throws IOException
+	 */
 	public static short[] readWaveShort(Path file) throws UnsupportedAudioFileException, IOException
 	{
 		AudioInputStream stream=AudioSystem.getAudioInputStream(file.toFile());
@@ -154,6 +161,14 @@ public class SoundUtils
 		return new double[]{stat.getMean(), stat.getStandardDeviation()};
 	}
 	
+	/**
+	 * Sampling rate must be same in the all wave files. Perhaps this constraint can be loosened by modifying other codes.
+	 * @param filename
+	 * @param dirWaveFile
+	 * @return
+	 * @throws UnsupportedAudioFileException
+	 * @throws IOException
+	 */
 	public static float checkSamplingRate(Collection<String> filename, Path dirWaveFile) throws UnsupportedAudioFileException, IOException
 	{
 		float samplingRate=Float.NaN;

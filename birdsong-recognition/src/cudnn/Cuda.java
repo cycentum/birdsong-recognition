@@ -24,6 +24,11 @@ import jcuda.runtime.cudaError;
 import jcuda.runtime.cudaMemcpyKind;
 import jcuda.Pointer;
 
+/**
+ * A class for cuda functions.
+ * @author koumura
+ *
+ */
 public class Cuda
 {
 	public static void setDevice(int device) throws CudaException

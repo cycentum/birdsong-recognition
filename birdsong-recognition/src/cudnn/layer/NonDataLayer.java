@@ -26,10 +26,19 @@ import cudnn.CudnnException;
 import cudnn.FloatType;
 import cudnn.Pointer;
 
+/**
+ * An interface for a non-data layer.
+ * **Dev means a pointer in a GPU.
+ * @author koumura
+ *
+ */
 public interface NonDataLayer extends Layer
 {
 	void compForward(FloatType floatType, Cudnn cudnn, int batchSize, CudaDriver driver) throws CudnnException, CudaException;
 	void compBackward(FloatType floatType, Cudnn cudnn, int batchSize, CudaDriver driver) throws CudnnException, CudaException;
 	Pointer getDerValueDev();
+	/**
+	 * @return Lower layer, ie. input layer of this layer.
+	 */
 	Layer getLower();
 }

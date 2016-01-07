@@ -36,6 +36,13 @@ import utils.CollectionUtils;
 import utils.Executor;
 import utils.MathUtils;
 
+/**
+ * This class performs computation of an HMM.
+ * Hyper parameters and other configurations must be set in {@link HyperParam} and {@link Config}, respectively.
+ * 
+ * @author koumura
+ *
+ */
 public class HmmComputation
 {
 	private static double[][][] transitionProbability(List<Sequence> sequence, LabelList labelList)
@@ -115,6 +122,10 @@ public class HmmComputation
 		for(double[] p: posterior) for(int la=0; la<p.length; ++la) p[la]/=fullLabelFrequency[la];
 	}
 	
+	/**
+	 * Computes trainsition probability from training data.
+	 * @return transition probability
+	 */
 	public static double[][][] transitionProbability(List<Sequence> trainingSequence, LabelList labelList, HyperParam hyperParam)
 	{
 		double[][][] transitionProbability=transitionProbability(trainingSequence, labelList);
@@ -122,6 +133,11 @@ public class HmmComputation
 		return transitionProbability;
 	}
 	
+	/**
+	 * Converts continuous outputs of a DNN to segmented observation probabilities for HMM. Used in the BD -&gt; LC -&gt; GS arrangement.
+	 * @param posteriorProb Outputs of a DNN
+	 * @return Observation probability
+	 */
 	public static HashMap<Sequence, ArrayList<double[]>> segmentedPosteriorToObservationProb(HashMap<Sequence, ArrayList<double[]>> posteriorProb, List<Sequence> trainingSequence, LabelList labelList, HyperParam hyperParam)
 	{
 		HashMap<Sequence, ArrayList<double[]>> observationProb=posteriorProb;
@@ -133,6 +149,10 @@ public class HmmComputation
 		return observationProb;
 	}
 	
+	/**
+	 * Performs global sequencing with a HMM. Used in the BD -&gt; LC -&gt; GS arrangement.
+	 * @return Recognized elements in each input sequence.
+	 */
 	public static HashMap<Sequence, ArrayList<Note>> globalSequencing(HashMap<Sequence, ArrayList<double[]>> observationProb, double[][][] transitionProb, LabelList labelList, HashMap<Sequence, ArrayList<int[]>> soundInterval, HyperParam hyperParam, Config config) throws InterruptedException, ExecutionException
 	{
 		ArrayList<Sequence> sequence=observationProb.keySet().stream().collect(CollectionUtils.arrayListCollector());
@@ -171,6 +191,11 @@ public class HmmComputation
 		return viterbiLabelInterval;
 	}
 
+	/**
+	 * Converts continuous outputs of a DNN into continuous observation probabilities for HMM. Used in the LC -&gt; BD & GS and LC & GS -&gt; BD & GS arrangements.
+	 * @param posteriorProb Outputs of a DNN
+	 * @return Observation probability
+	 */
 	public static HashMap<Sequence, ArrayList<double[]>> continuousPosteriorToObservationProb(HashMap<Sequence, float[]> posteriorProb, List<Sequence> trainingSequence, LabelList labelList, HyperParam hyperParam, Config config)
 	{
 		int posteriorWidth=config.posteriorWidth;
@@ -196,6 +221,10 @@ public class HmmComputation
 		return observationProb;
 	}
 	
+	/**
+	 * Performs global sequencing with a HMM. Used in the LC -&gt; BD & GS and LC & GS -&gt; BD & GS arrangements.
+	 * @return Recognized elements in each input sequence.
+	 */
 	public static HashMap<Sequence, ArrayList<Note>> globalSequencingWithBoundaryDetection(HashMap<Sequence, ArrayList<double[]>> observationProb, double[][][] transitionProb, LabelList labelList, HyperParam hyperParam, Config config) throws InterruptedException, ExecutionException
 	{
 		ArrayList<Sequence> sequence=observationProb.keySet().stream().collect(CollectionUtils.arrayListCollector());
@@ -255,14 +284,14 @@ public class HmmComputation
 		}
 	}
 	
-	public static class SequencerJob implements Callable<Object>
+	private static class SequencerJob implements Callable<Object>
 	{
 		private SecondOrderLowerTransition transition;
 		private ViterbiSequencer sequencer;
 		private HashMap<Sequence, ArrayList<double[]>> observationProb;
 		private HashMap<Sequence, ArrayList<int[]>> answer;
 		
-		public SequencerJob(SecondOrderLowerTransition transition, HashMap<Sequence, ArrayList<double[]>> observationProb)
+		private SequencerJob(SecondOrderLowerTransition transition, HashMap<Sequence, ArrayList<double[]>> observationProb)
 		{
 			this.observationProb=observationProb;
 			this.transition=transition;

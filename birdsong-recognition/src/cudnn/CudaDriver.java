@@ -32,6 +32,11 @@ import jcuda.driver.CUfunction;
 import jcuda.driver.CUmodule;
 import jcuda.driver.JCudaDriver;
 
+/**
+ * A class to call custom-written kernels.
+ * @author koumura
+ *
+ */
 public class CudaDriver
 {
 	private CUmodule module;

@@ -27,6 +27,11 @@ import cudnn.Cudnn;
 import cudnn.CudnnException;
 import cudnn.Pointer;
 
+/**
+ * A general model with trainable parameters.
+ * @author koumura
+ *
+ */
 public interface Model
 {
 	ArrayList<Pointer> getParamDev();

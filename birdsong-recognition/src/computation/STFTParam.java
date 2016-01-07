@@ -21,6 +21,11 @@ package computation;
 
 import utils.MathUtils;
 
+/**
+ * This class handles parameters for short time Fourier transformation.
+ * @author koumura
+ *
+ */
 public class STFTParam
 {
 	private int fftLength, shiftLength;
@@ -39,26 +44,52 @@ public class STFTParam
 		return shiftLength;
 	}
 	
+	/**
+	 * Converts a length of a wave data into length of the spectrogram.
+	 * @param waveLength Length of a wave data.
+	 * @return Length of the spectrogram.
+	 */
 	public int spectrogramLength(int waveLength)
 	{
 		return MathUtils.ceil(waveLength-(fftLength-shiftLength), shiftLength);
 	}
 	
+	/**
+	 * Converts a position in a spectrogram into the position in the wave data.
+	 * @param spectrogramPosition Position in a spectrogram.
+	 * @return Position in the wave data.
+	 */
 	public int wavePosition(int spectrogramPosition)
 	{
 		return spectrogramPosition*shiftLength+fftLength/2;
 	}
 	
+	/**
+	 * Converts a position in a wave data into the position in the spectrogram.
+	 * @param wavePosition Position in a wave data.
+	 * @return Position in the spectrogram.
+	 */
 	public int spectrogramPosition(int wavePosition)
 	{
 		return (wavePosition-fftLength/2)/shiftLength;
 	}
 	
+	/**
+	 * Computes frequency width (Hz) in a single cell.
+	 * @param samplingRate
+	 * @return frequency width (Hz).
+	 */
 	public double unitFrequency(int samplingRate)
 	{
 		return unitFrequency(samplingRate, fftLength);
 	}
 	
+	/**
+	 * Computes frequency width (Hz) in a single cell.
+	 * @param samplingRate
+	 * @param fftLength
+	 * @return frequency width (Hz).
+	 */
 	public static double unitFrequency(int samplingRate, int fftLength)
 	{
 		return (double)samplingRate/fftLength;

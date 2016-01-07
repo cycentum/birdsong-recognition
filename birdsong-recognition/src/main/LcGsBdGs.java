@@ -56,7 +56,13 @@ import utils.Executor;
 import utils.Pair;
 import utils.SoundUtils;
 
-
+/**
+ * A class that contains an entry point for training and recognition by the LC & GS -&gt; BD & GS arrangement.
+ * Before the execution, paths to the necessary files must be set according to the users' computation environment.
+ * Users can modify these codes to perform the computation matching their own purposes.
+ * Step-by-step descriptions are given by comments in {@link #main(Executor)}
+ * @author koumura
+ */
 public class LcGsBdGs
 {
 	public static void main(String... arg)
@@ -166,7 +172,7 @@ public class LcGsBdGs
 		Config dnnConfig=new Config(verbose, silentLabelFunc, softmaxSizeFunc, specMeanSd, fileCudaKernel, fileCudnnLibrary, dirWave, backwardAlgorithm);
 		
 		//Training.
-		DnnComputation.Param dnnParam=DnnComputation.trainLocalRecognition(trainingSequence, labelList, random, dnnHyperParam, dnnConfig);
+		DnnComputation.Param dnnParam=DnnComputation.training(trainingSequence, labelList, random, dnnHyperParam, dnnConfig);
 		
 		//Parameter saving.
 		Files.createDirectories(fileDnnParameter.getParent());
@@ -177,7 +183,7 @@ public class LcGsBdGs
 //		DnnComputation.Param dnnParam=new DnnComputation.Param(DnnUtils.loadParam(fileDnnParameter));
 		
 		//Local recognition in the validation data.
-		HashMap<Sequence, float[]> dnnOutput=DnnComputation.localRecognition(validationSequence, labelList, dnnParam, dnnHyperParam, dnnConfig);
+		HashMap<Sequence, float[]> dnnOutput=DnnComputation.recognition(validationSequence, labelList, dnnParam, dnnHyperParam, dnnConfig);
 		
 		//Saving DNN output.
 		Files.createDirectories(fileDnnOutput.getParent());

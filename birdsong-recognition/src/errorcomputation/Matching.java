@@ -35,6 +35,11 @@ import computation.Sequence.Note;
 import utils.ArrayUtils;
 import utils.CollectionUtils;
 
+/**
+ * A class to compute the matching error.
+ * @author koumura
+ *
+ */
 public class Matching
 {
 	private static int[] indexArray(ArrayList<int[]> interval, int sequenceLength)
@@ -192,12 +197,16 @@ public class Matching
 	/**
 	 * @param correctSpecLabelInterval int[](begin, length, label)
 	 * @param answerSpecLabelInterval int[](begin, length, label)
+	 * @return Total length of matched intervals.
 	 */
 	public static int computeMatchedLength(ArrayList<int[]> correctSpecLabelInterval, ArrayList<int[]> answerSpecLabelInterval, int sequenceSpecLength)
 	{
 		return compMatching(correctSpecLabelInterval, answerSpecLabelInterval, sequenceSpecLength).size();
 	}
 	
+	/**
+	 * @return Total length of matched intervals.
+	 */
 	public static int computeDistance(Sequence correctSequence, List<Note> outputNoteSequence, STFTParam stftParam, LabelList labelList)
 	{
 		Function<Note, int[]> conv=n->{
@@ -212,6 +221,10 @@ public class Matching
 		return sequenceSpecLength-computeMatchedLength(correctSpecLabelInterval, outputSpecLabelInterval, sequenceSpecLength);
 	}
 	
+	/**
+	 * @param outputSequence Map of correct sequences to output intervals.
+	 * @return Matching error.
+	 */
 	public static double computeError(Map<Sequence, ArrayList<Note>> outputSequence, STFTParam stftParam, LabelList labelList)
 	{
 		int specLength=0, distance=0;

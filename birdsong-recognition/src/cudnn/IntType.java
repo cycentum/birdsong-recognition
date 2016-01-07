@@ -19,6 +19,12 @@
  */
 package cudnn;
 
+/**
+ * Types of integers. Used as the type of labels. When the number of labels are more than {@link Byte#MAX_VALUE}, {@link IntType#INT} must be used.
+ * The type must be consistent throughout the computation.
+ * @author koumura
+ *
+ */
 public enum IntType
 {
 	BYTE(Byte.BYTES), INT(Integer.BYTES);

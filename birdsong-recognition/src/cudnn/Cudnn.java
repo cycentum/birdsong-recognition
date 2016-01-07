@@ -34,6 +34,11 @@ import cudnn.CudnnLibrary.cudnnFilterDescriptor_t;
 import cudnn.CudnnLibrary.cudnnTensorDescriptor_t;
 import cudnn.layer.Layer;
 
+/**
+ * A class to handle the cudnn library.
+ * @author koumura
+ *
+ */
 public class Cudnn
 {
 	CudnnLibrary.Instance library;

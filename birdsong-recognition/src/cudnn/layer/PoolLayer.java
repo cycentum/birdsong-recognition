@@ -29,6 +29,14 @@ import cudnn.FloatType;
 import cudnn.Pointer;
 import cudnn.PoolingMode;
 
+/**
+ * A class for a pooling layer.
+ * {@link #init(FloatType, Cudnn, int)} and {@link #cudaMalloc(FloatType, int)} must be called before computation.
+ * {@link #destroy(Cudnn)} must be called before termination of the program.
+ * **Dev means a pointer in a GPU.
+ * @author koumura
+ *
+ */
 public class PoolLayer implements NonDataLayer
 {
 	private int numChannel, height, width;

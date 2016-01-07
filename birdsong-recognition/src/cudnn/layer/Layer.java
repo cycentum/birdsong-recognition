@@ -26,12 +26,26 @@ import cudnn.CudnnLibrary;
 import cudnn.FloatType;
 import cudnn.Pointer;
 
+/**
+ * An interface for a general layer.
+ * {@link #init(FloatType, Cudnn, int)} and {@link #cudaMalloc(FloatType, int)} must be called before computation.
+ * {@link #destroy(Cudnn)} must be called before termination of the program.
+ * **Dev means a pointer in a GPU.
+ * @author koumura
+ *
+ */
 public interface Layer
 {
 	int getNumChannel();
 	int getHeight();
 	int getWidth();
+	/**
+	 * @return numChannel * height * width
+	 */
 	default int sizeCHW(){return getNumChannel()*getHeight()*getWidth();}
+	/**
+	 * @return height * width
+	 */
 	default int sizeHW(){return getHeight()*getWidth();}
 	
 	void cudaMalloc(FloatType floatType, int batchSize) throws CudaException;

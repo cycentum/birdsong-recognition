@@ -19,6 +19,11 @@
  */
 package cudnn;
 
+/**
+ * Types of softmax computation.
+ * @author koumura
+ *
+ */
 public enum SoftmaxMode {
 	/**
 	 * compute the softmax over all C, H, W for each N<br>

@@ -30,6 +30,15 @@ import cudnn.FloatType;
 import cudnn.IntType;
 import cudnn.Pointer;
 
+/**
+ * A class for a convolutional layer with the softmax activation function.
+ * {@link #init(FloatType, Cudnn, int)} and {@link #cudaMalloc(FloatType, int)} must be called before computation.
+ * {@link #destroy(Cudnn)} must be called before termination of the program.
+ * **Dev means a pointer in a GPU.
+ * 
+ * @author koumura
+ *
+ */
 public class SeqSoftmaxConvLayer extends ConvLayer implements OutputLayer
 {
 	private Pointer sizeDev, errorDev;

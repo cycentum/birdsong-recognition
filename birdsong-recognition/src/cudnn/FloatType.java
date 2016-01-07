@@ -19,6 +19,11 @@
  */
 package cudnn;
 
+/**
+ * Types of floating points. The type must be consistent throughout the computation.
+ * @author koumura
+ *
+ */
 public enum FloatType
 {
 	SINGLE(Float.BYTES, CudnnLibrary.cudnnDataType_t.CUDNN_DATA_FLOAT), DOUBLE(Double.BYTES, CudnnLibrary.cudnnDataType_t.CUDNN_DATA_DOUBLE);
