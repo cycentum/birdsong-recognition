@@ -23,6 +23,7 @@ Users must prepare following libraries and processors.
 + Cuda 7.0 (or later) and a Cuda compatible graphics processor.
 + Cudnn ver. 3.
 + JCuda (http://www.jcuda.org/).
++ JDK 8.
 
 ##Libraries
 Other libraries used in this program are as follows (described in [pom.xml](birdsong-recognition/pom.xml)).
