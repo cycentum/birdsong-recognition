@@ -50,7 +50,6 @@ import utils.SoundUtils;
  * This class handles data for DNN computation.
  * 
  * @author koumura
- *
  */
 public class BatchData
 {
