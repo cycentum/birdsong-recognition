@@ -40,7 +40,7 @@ https://xerces.apache.org/
 + Matrix toolkits java.
 https://github.com/fommil/matrix-toolkits-java
 
-Also, https://github.com/tbennun/cudnn-training has been very helpful for writing the program.
+Although this program does not include it as a library, https://github.com/tbennun/cudnn-training has been very helpful for writing the program.
 
 ##License
 This program is distributed under the term of GNU public license ver. 3. The copy of the license is in  [LICENSE](LICENSE).
