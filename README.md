@@ -28,7 +28,7 @@ Users must prepare following libraries and processors.
 Also, users must compile [cuda-kernels/kernel.cu](cuda-kernels/kernel.cu) into PTX file. The path to the PTX file must be set in the main methods.
 
 ##Libraries
-Other libraries used in this program are as follows (described in [pom.xml](birdsong-recognition/pom.xml)).
+Other libraries used in this program are as follows (listed in [pom.xml](birdsong-recognition/pom.xml)).
 + Java native access.
 https://github.com/java-native-access/jna
 + JNAerator.
@@ -39,6 +39,8 @@ https://commons.apache.org/proper/commons-math/
 https://xerces.apache.org/
 + Matrix toolkits java.
 https://github.com/fommil/matrix-toolkits-java
+
+Also, https://github.com/tbennun/cudnn-training has been very helpful for writing the program.
 
 ##License
 This program is distributed under the term of GNU public license ver. 3. The copy of the license is in  [LICENSE](LICENSE).
