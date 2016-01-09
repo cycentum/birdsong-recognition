@@ -44,3 +44,6 @@ Although this program does not include it as a library, https://github.com/tbenn
 
 ##License
 This program is distributed under the term of GNU public license ver. 3. The copy of the license is in  [LICENSE](LICENSE).
+
+-
+Copyright &copy; 2016 Takuya KOUMURA
