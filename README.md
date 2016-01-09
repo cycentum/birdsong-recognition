@@ -18,12 +18,13 @@ Users who would like to perform the computation with their own data must prepare
 + All the hyper parameters are prefixed in the source code. In the manuscript, some of them are optimized by cross-validation within training data.
 + In the manuscript, in training with the LC & GS -> BD & GS arrangement, first the network with the same structure as the LC -> BD & GS arrangement is trained, and then additional fully-connected layer was inserted before training the whole network. In this source code, the whole network whose parameters were initialized randomly was trained from the beginning.
 
-##Requirements
+##Prerequisites
 Users must prepare following libraries and processors.
 + Cuda 7.0 (or later) and a Cuda compatible graphics processor.
 + Cudnn ver. 3.
 + JCuda (http://www.jcuda.org/).
 + JDK 8.
+Also, users must compile [cuda-kernels/kernel.cu](cuda-kernels/kernel.cu) into PTX file. The path to the PTX file must be set in the main methods.
 
 ##Libraries
 Other libraries used in this program are as follows (described in [pom.xml](birdsong-recognition/pom.xml)).
