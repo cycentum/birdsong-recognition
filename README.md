@@ -24,6 +24,7 @@ Users must prepare following libraries and processors.
 + Cudnn ver. 3.
 + JCuda (http://www.jcuda.org/).
 + JDK 8.
+
 Also, users must compile [cuda-kernels/kernel.cu](cuda-kernels/kernel.cu) into PTX file. The path to the PTX file must be set in the main methods.
 
 ##Libraries
