@@ -1,6 +1,6 @@
 #Birdsong Recognition
 
-This is a source code for the manuscript “Automatic recognition of element classes and boundaries in the birdsong with variable sequences” by Takuya Koumura and Kazuo Okanoya (not published yet).
+This is a source code for the manuscript “Automatic recognition of element classes and boundaries in the birdsong with variable sequences” by Takuya Koumura and Kazuo Okanoya (http://arxiv.org/abs/1601.06248).
 
 This program performs automatic recognition of birdsong and parameter training for the recognizer using given ground truth. The source code includes three algorithms for automatic recognition: “BD -> LC -> GS”, “LC -> BD & GS”, and “Lc & GS -> BD & GS”, each of which is implemented in the classes [main.BdLcGs](birdsong-recognition/src/main/BdLcGs.java), [main.LcBdGs](birdsong-recognition/src/main/LcBdGs.java), and [main.LcGsBdGs](birdsong-recognition/src/main/LcGsBdGs.java). A viewer for an output sequence is also provided in another class, [main.Viewer](birdsong-recognition/src/main/Viewer.java). Please read the manuscript for the detailed description of these three algorithms.
 
