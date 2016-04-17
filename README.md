@@ -45,5 +45,10 @@ Although this program does not include it as a library, https://github.com/tbenn
 ##License
 This program is distributed under the term of GNU public license ver. 3. The copy of the license is in  [LICENSE](LICENSE).
 
+##Grants
+This project is supported by...
++ Grant-in-Aid for Scientific Research (A) (#26240019), MEXT/JSPS, Japan, to KO.
++ Grant-in-Aid for JSPS Fellows, MEXT/JSPS, Japan (#15J09948) to TK.
+
 -
 Copyright &copy; 2016 Takuya KOUMURA
