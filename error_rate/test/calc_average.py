@@ -26,7 +26,7 @@ def readErrorRate(file):
 
 if __name__=="__main__":
 
-	dirErrorRate=Path("./..")
+	dirErrorRate=Path("./../error_rate")
 	
 	errorRate={}
 	for bird in range(11):

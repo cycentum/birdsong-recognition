@@ -1,6 +1,6 @@
 from pathlib import Path
 import sys
-import numpy as np
+import math
 
 sys.path.append("../../fold/test")
 from show_duration import readAnnotationXml
@@ -23,7 +23,7 @@ def readTotalFrameLengthFromErrorFile(file):
 
 if __name__=="__main__":
 	
-	dirErrorRate=Path("./..")
+	dirErrorRate=Path("./../error_rate")
 	dirSong=Path("path/to/song/data/downloaded/from/figshare")
 	
 	fft_size=512
@@ -37,7 +37,7 @@ if __name__=="__main__":
 		totalSpectrogramLength=0
 		for sequence in annotation:
 			length=sequence["length"]
-			spectrogramLength=int(np.ceil((length-fft_overlap)/fft_step))
+			spectrogramLength=int(math.ceil((length-fft_overlap)/fft_step))
 			totalSpectrogramLength+=spectrogramLength
 		
 		fileErrorRate=dirErrorRate/("Bird"+str(bird)+".txt")
