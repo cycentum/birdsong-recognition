@@ -17,6 +17,13 @@ Test data for running the program are available at https://figshare.com/articles
 
 Users who would like to perform the computation with their own data must prepare data with the same format as the provided test data. Sound data must be 16 bit linear PCM wave format with any sampling rate. Annotations of the songs must be given in XML format following the schema [xsd/AnnotationSchema.xsd](xsd/AnnotationSchema.xsd). Alternatively, users may modify the source code to load data with arbitrary format.
 
+## Files
++ [birdsong-recognition](birdsong-recognition): Main java codes for song recognition.
++ [cuda-kernels](cuda-kernels): Cuda kernels used in Java codes.
++ [error_rate](error_rate): Error rates reported in the paper.
++ [fold](fold): Fold information of three-fold cross-validation.
++ [xsd](xsd): XML schema of Annotation.xml shared in figshare (see above).
+
 ## Differences from the manuscript
 
 + Learning rate for parameter updating of the neural network are fixed in the manuscript, but are adaptively determined using Adam method in this source code.
