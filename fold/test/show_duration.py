@@ -26,7 +26,7 @@ def readAnnotationXml(fileAnnotation):
 
 if __name__=="__main__":
 	
-	dirFold=Path("./..")
+	dirFold=Path("./../fold")
 	dirSong=Path("path/to/song/data/downloaded/from/figshare")
 	
 	fs=32000
